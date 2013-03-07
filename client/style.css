@@ -1,0 +1,29 @@
+/*
+ * style.css
+ */
+
+#root {
+	perspective: 800;
+	-webkit-perspective: 800;
+	-moz-perspective: 800;
+	-o-perspective: 800;
+	
+	background-clip: border-box;
+	-webkit-background-clip: border-box;
+	-moz-background-clip: border-box;
+	-o-background-clip: border-box;
+
+	background-origin: padding-box;
+	-webkit-background-origin: padding-box;
+	-moz-background-origin: padding-box;
+	-o-background-origin: padding-box;
+
+	background-size: auto;
+	-webkit-background-size: auto;
+	-moz-background-size: auto;
+	-o-background-size: auto;
+
+	height:100%;
+	width:100%;
+	float:left;
+}

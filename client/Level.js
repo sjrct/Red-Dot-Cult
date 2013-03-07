@@ -1,0 +1,8 @@
+//
+// Level.js
+//
+
+function Level()
+{
+	
+}
