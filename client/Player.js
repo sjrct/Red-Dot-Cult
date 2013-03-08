@@ -23,6 +23,7 @@ Player.prototype.add_weapon(weap)
 			if (this.weapons[i].resammo > this.weapons[i].maxres) {
 				this.weapons[i].resammo = this.weapons[i].maxres;
 			}
+			return;
 		}
 	}
 	
