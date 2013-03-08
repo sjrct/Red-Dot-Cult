@@ -4,5 +4,7 @@
 
 function Level()
 {
-	
+	this.weapons = [];
+	this.entities = [];
 }
+

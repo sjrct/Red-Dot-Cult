@@ -2,6 +2,14 @@
 // main.js
 //
 
+var Controls = {
+	left:   37,	// left arrow
+	right:  38,	// right arrow
+	up:     39,	// up arrow
+	down:   40,	// down arrow
+	reload: 17,	// ctrl
+};
+
 $(document).ready(function(){
 	var mleft = false, mright = false;
 	var mfoward = false, mbackward = false;
@@ -20,20 +28,24 @@ $(document).ready(function(){
 	$(document).keydown(function(e)
 	{
 		switch(e.keyCode) {
-			case 37: mleft     = true; break;
-			case 38: mfoward   = true; break;
-			case 39: mright    = true; break;
-			case 40: mbackward = true; break;
+			case Controls.left:  mleft     = true; break;
+			case Controls.up:    mfoward   = true; break;
+			case Controls.right: mright    = true; break;
+			case Controls.down:  mbackward = true; break;
+
+			case Controls.reload:
+				local_plyr.weapon().reload;
+				break;
 		};
 	});
 
 	$(document).keyup(function(e)
 	{
 		switch(e.keyCode) {
-			case 37: mleft     = false; break;
-			case 38: mfoward   = false; break;
-			case 39: mright    = false; break;
-			case 40: mbackward = false; break;
+			case Controls.left:  mleft     = false; break;
+			case Controls.up:    mfoward   = false; break;
+			case Controls.right: mright    = false; break;
+			case Controls.down:  mbackward = false; break;
 		};
 	});
 	
