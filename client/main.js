@@ -15,6 +15,7 @@ $(document).ready(function(){
 	var mfoward = false, mbackward = false;
 	var local_plyr = new Player("You");
 	var camera = new Camera($("#root"));
+	var teapot = new TriModel(camera.div, "teapot");
 
 	var oldx=0, oldy=0;
 	$(document).mousemove(function(e){

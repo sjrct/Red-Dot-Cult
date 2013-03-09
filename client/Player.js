@@ -13,9 +13,10 @@ function Player(tag)
 //	this.entity = new Entity("player.obj");
 }
 
-Player.prototype.add_weapon(weap)
+Player.prototype.add_weapon = function(weap)
 {
 	// type checking might be helpful
+	// Tripple equals FTW
 	
 	for (var i = 0; i < this.weapons.length; i++) {
 		if (this.weapons[i].tag == weap.tag) {

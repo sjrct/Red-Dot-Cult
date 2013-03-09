@@ -35,7 +35,6 @@ function _init_utils()
 
 	}
 	
-	document.removeChild(el);
 }
 _init_utils();
 
