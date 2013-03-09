@@ -40,11 +40,6 @@ int main(int argc, char **argv)
 		// Calculate 2d triangle
 		Tri3dTo2d(new_triangle, A);
 
-		// Caclulate 2 rotations
-		glm::vec4 R1;
-		glm::vec4 R2;
-		rot(R1, R2, A, new_triangle);
-		
 		out << "[";
 
 		// Print 2d triangle
@@ -53,6 +48,12 @@ int main(int argc, char **argv)
 		}
 		// Print translation
 		out << "[" << A[0].x << "," << A[0].y << "," << A[0].z << "]," << endl;
+
+		// Caclulate 2 rotations
+		glm::vec4 R1;
+		glm::vec4 R2;
+		rot(R1, R2, A, new_triangle);
+
 		// Print rotations
 		out << "[" << R1[0] << "," << R1[1] << "," << R1[2] << "," << R1[3] << "]," << endl;
 		out << "[" << R2[0] << "," << R2[1] << "," << R2[2] << "," << R2[3] << "]," << endl;
