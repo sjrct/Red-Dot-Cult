@@ -4,8 +4,8 @@
 
 var Controls = {
 	left:   37,	// left arrow
-	right:  38,	// right arrow
-	up:     39,	// up arrow
+	up:     38,	// up arrow
+	right:  39,	// right arrow
 	down:   40,	// down arrow
 	reload: 17,	// ctrl
 };
@@ -63,14 +63,16 @@ $(document).ready(function(){
 	
 	window.setInterval(function()
 	{
-		if (mfoward)   //TODO;
-		if (mbackward) ;
-		if (mright)    ;
-		if (mleft)     ;
+		// FIXME
+		off = 40;
+		if (mfoward)   local_plyr.pos.x += off;
+		if (mbackward) local_plyr.pos.x -= off;
+		if (mright)    local_plyr.pos.z += off;
+		if (mleft)     local_plyr.pos.z -= off;
 		
 		$("#dbg").html(
 			"cam pos = (" + camera.pos.x + ", " + camera.pos.y + ", " + camera.pos.z + ")<br>" +
 			"cam rot = (" + camera.rot.x + ", " + camera.rot.y + ", " + camera.rot.z + ")<br>" 
 		);
-	}, 100);
+	}, 20);
 });
