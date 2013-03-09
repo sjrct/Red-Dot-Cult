@@ -35,7 +35,7 @@ $(document).ready(function(){
 			case Controls.down:  mbackward = true; break;
 
 			case Controls.reload:
-				local_plyr.weapon().reload;
+				//local_plyr.weapon().reload;
 				break;
 		};
 	});

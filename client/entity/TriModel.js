@@ -52,10 +52,12 @@ TriModel.prototype.Load = function() {
 	$(this.div).css("position", "relative");
 	$(this.div).css("margin", "0 auto");
 
-	console.log("Loading model " + this.model + ".js");
+	var path = "models/" + this.model + ".js";
+
+	console.log("Loading model " + path);
 	var model = this.model;
 	var div = this.div;
-	loadScript(this.model + ".js", function() {
+	loadScript(path, function() {
 		var start = new Date().getTime();
 		var true_model = eval(model);
 		for(var i = 0; i < true_model.length; i++) {
