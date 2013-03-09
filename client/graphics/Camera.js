@@ -7,13 +7,13 @@ function __CameraUpdateHack(cam) {
 }
 
 function Camera(parent) {
-	this.rot = new Vector3(180, 90, 0);
-	this.trs = new Vector3(0, 200, -1000);
+	this.rot = new Vector3(0, 0, 0);
+	this.trs = new Vector3(0, 0, 0);
 	this.div = document.createElement("div");
 	
 	this.Update = function() {
 		// I am pretty sure the correct order should be rotate->translate
-		UpdateByObj(this.div, transform, rotate3d(this.rot) + translate3d(this.trs));
+		UpdateByObj(this.div, transform, rotate3d(this.rot)+translate3d(this.trs));
 	}
 	
 	parent.append(this.div);
