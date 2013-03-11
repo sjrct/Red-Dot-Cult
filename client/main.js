@@ -15,7 +15,7 @@ $(document).ready(function(){
 	var mfoward = false, mbackward = false;
 	var local_plyr = new Player("You");
 	var camera = new Camera($("#camera"));
-	var teapot = new TriModel(camera.div, "teapot");
+	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
 
 	// lock camera to player
 	camera.rot = local_plyr.rot;
@@ -74,5 +74,5 @@ $(document).ready(function(){
 			"cam pos = (" + camera.pos.x + ", " + camera.pos.y + ", " + camera.pos.z + ")<br>" +
 			"cam rot = (" + camera.rot.x + ", " + camera.rot.y + ", " + camera.rot.z + ")<br>" 
 		);
-	}, 20);
+	}, 100);
 });
