@@ -16,6 +16,8 @@ $(document).ready(function(){
 	var local_plyr = new Player("You");
 	var camera = new Camera($("#camera"));
 	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
+	var teapot2 = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
+	teapot2.Translate3d(new Vector3(0,-200,0));
 
 	// lock camera to player
 	camera.rot = local_plyr.rot;
@@ -75,4 +77,27 @@ $(document).ready(function(){
 			"cam rot = (" + camera.rot.x + ", " + camera.rot.y + ", " + camera.rot.z + ")<br>" 
 		);
 	}, 100);
+	
+	/*
+	var socket;  
+	var host = "ws://localhost:8888/ws";  
+	var socket = new WebSocket(host);  
+	function message(foo) {
+		alert(foo);
+	}
+
+	message('<p class="event">Socket Status: '+socket.readyState);  
+
+	socket.onopen = function(){  
+		message('<p class="event">Socket Status: '+socket.readyState+' (open)');  
+	}  
+
+	socket.onmessage = function(msg){
+		message('<p class="message">Received: '+msg.data);  
+		socket.send("hi there!");
+	}
+
+	socket.onclose = function(){  
+		message('<p class="event">Socket Status: '+socket.readyState+' (Closed)');  
+	}  */
 });
