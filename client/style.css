@@ -8,21 +8,25 @@
 	-webkit-perspective: 800;
 	-moz-perspective: 800;
 	-o-perspective: 800;
+	-ms-perspective: 800;
 	
 	background-clip: border-box;
 	-webkit-background-clip: border-box;
 	-moz-background-clip: border-box;
 	-o-background-clip: border-box;
+	-ms-background-clip: border-box;
 
 	background-origin: border-box;
 	-webkit-background-origin: border-box;
 	-moz-background-origin: border-box;
 	-o-background-origin: border-box;
+	-ms-background-origin: border-box;
 
 	background-size: auto;
 	-webkit-background-size: auto;
 	-moz-background-size: auto;
 	-o-background-size: auto;
+	-ms-background-size: auto;
 
 	width:100%;
 	height:100%;

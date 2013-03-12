@@ -15,13 +15,16 @@ $(document).ready(function(){
 	var mfoward = false, mbackward = false;
 	var local_plyr = new Player("You");
 	var camera = new Camera($("#camera"));
+	var l = new Entity.Load(camera.div, Entity.ModelType.RectModel, "level");
 	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
-	var teapot2 = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
-	teapot2.Translate3d(new Vector3(0,-200,0));
+//	var teapot2 = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
+//	teapot.Translate3d(new Vector3(600,0,0));
 
 	// lock camera to player
 	camera.rot = local_plyr.rot;
 	camera.pos = local_plyr.pos;
+
+	camera.pos.y = -150;
 
 	var oldx=0, oldy=0, first_mm = true;
 	$(document).mousemove(function(e){
@@ -62,19 +65,36 @@ $(document).ready(function(){
 			case Controls.down:  mbackward = false; break;
 		};
 	});
-	
+
+	var speed = 40;	
 	window.setInterval(function()
 	{
-		// FIXME
-		off = 40;
-		if (mfoward)   local_plyr.pos.x += off;
-		if (mbackward) local_plyr.pos.x -= off;
-		if (mright)    local_plyr.pos.z += off;
-		if (mleft)     local_plyr.pos.z -= off;
+		var theta = -local_plyr.rot.y * (Math.PI)/180;
+		var theta2 = theta + (Math.PI/2);
+		var dx = 0, dz = 0;
+		if (mfoward) {
+			dz -= Math.cos(theta) * speed;
+			dx -= Math.sin(theta) * speed;
+		}
+		if (mbackward) {
+			dz += Math.cos(theta) * speed;
+			dx += Math.sin(theta) * speed;
+		}
+		if (mright) {
+			dz -= Math.cos(theta2) * speed;
+			dx -= Math.sin(theta2) * speed;
+		}
+		if (mleft) {
+			dz += Math.cos(theta2) * speed;
+			dx += Math.sin(theta2) * speed;
+		}
+		
+		local_plyr.pos.x += dx;
+		local_plyr.pos.z += dz;
 		
 		$("#dbg").html(
 			"cam pos = (" + camera.pos.x + ", " + camera.pos.y + ", " + camera.pos.z + ")<br>" +
-			"cam rot = (" + camera.rot.x + ", " + camera.rot.y + ", " + camera.rot.z + ")<br>" 
+			"cam rot = (" + camera.rot.x + ", " + camera.rot.y + ", " + camera.rot.z + ")<br>"
 		);
 	}, 100);
 	

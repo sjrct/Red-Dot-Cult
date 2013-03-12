@@ -46,6 +46,10 @@ function translate3d(v) {
 	return "translate3d("+v.x+"px, "+v.y+"px, "+v.z+"px) ";
 }
 
+function ptranslate3d(x,y,z) {
+	return "translate3d("+x+"px, "+y+"px, "+z+"px) ";
+}
+
 function rotate3d(v) {
 	return "rotateX("+v.x+"deg) rotateY("+v.y+"deg) rotateZ("+v.z+"deg) ";
 }

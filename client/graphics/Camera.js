@@ -13,7 +13,11 @@ function Camera(parent) {
 	
 	this.Update = function() {
 		// I am pretty sure the correct order should be rotate->translate
-		UpdateByObj(this.div, transform, rotate3d(this.rot)+translate3d(this.pos));
+		mx = -this.pos.x;
+		my = -this.pos.y;
+		mz = -this.pos.z;
+		UpdateByObj(this.div, transform_origin, mx + "px " + my + "px " + mz + "px");
+		UpdateByObj(this.div, transform, ptranslate3d(this.pos.x, this.pos.y, -150) + rotate3d(this.rot));
 	}
 	
 	parent.append(this.div);
