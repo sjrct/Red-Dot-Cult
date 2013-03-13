@@ -8,7 +8,7 @@ function Player(tag)
 	this.health = Player.MAX_HEALTH;
 	this.weapons = [];
 	this.pos = new Vector3(0, 0, 0);
-	this.rot = new Vector3(-160, 80, 0);
+	this.rot = new Vector3(0, 0, 0);
 
 //	this.entity = new Entity("player.obj");
 }

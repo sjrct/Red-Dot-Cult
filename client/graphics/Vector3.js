@@ -4,9 +4,15 @@
 
 function Vector3(x, y, z)
 {
-	this.x = x;
-	this.y = y;
-	this.z = z;
+	if (x instanceof Array) {
+		this.x = x[0];
+		this.y = x[1];
+		this.z = x[2];
+	} else {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 }
 
 Vector3.prototype.operate = function(v, op)

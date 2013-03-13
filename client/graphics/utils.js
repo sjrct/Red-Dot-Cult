@@ -59,7 +59,7 @@ function scale3d(v) {
 }
 
 function skew3d(v) {
-	return "skewX("+v.x+"deg) skewY("+v.y+"deg) skewZ("+v.z+") ";
+	return "skewX("+v.x+"deg) skewY("+v.y+"deg) skewZ("+v.z+"deg) ";
 }
 
 

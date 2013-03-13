@@ -9,7 +9,7 @@ namespace('Entity', function () {
 //		applyTexture(texture)
 	
 		UpdateByObj(div, transform_origin, "0% 0%");
-		UpdateByObj(div, transform, translate3d(pos) + rotate3d(rot));
+		UpdateByObj(div, transform, translate3d(new Vector(pos)) + rotate3d(new Vector(rot)));
 	
 		return div;
 	}
