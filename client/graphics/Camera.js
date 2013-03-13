@@ -24,9 +24,11 @@ function Camera(parent) {
 	UpdateByObj(this.div, transform_style, "preserve-3d");
 	UpdateByObj(this.div, transition_duration, "0.3s")
 	UpdateByObj(this.div, transform_origin, "0 0 0");
+	UpdateByObj(this.div, backface_visibility, "hidden");
 	UpdateByObj(this.divtop, transform_style, "preserve-3d");
 	UpdateByObj(this.divtop, transition_duration, "0.3s");
 	UpdateByObj(this.divtop, transform_origin, "0 0 0");
+	UpdateByObj(this.divtop, backface_visibility, "hidden");
 
 	$(this.div).css("position", "absolute");
 	$(this.div).css("left", "50%");
