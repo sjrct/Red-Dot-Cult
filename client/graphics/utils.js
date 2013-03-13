@@ -43,7 +43,7 @@ function UpdateByObj(obj, prop, value) {
 }
 
 function translate3d(v) {
-	return "translate3d("+v.x+"px, "+v.y+"px, "+v.z+"px) ";
+	return v.isZero() ? "" : "translate3d("+v.x+"px, "+v.y+"px, "+v.z+"px) ";
 }
 
 function ptranslate3d(x,y,z) {
@@ -51,7 +51,7 @@ function ptranslate3d(x,y,z) {
 }
 
 function rotate3d(v) {
-	return "rotateX("+v.x+"deg) rotateY("+v.y+"deg) rotateZ("+v.z+"deg) ";
+	return  v.isZero() ? "" : "rotateX("+v.x+"deg) rotateY("+v.y+"deg) rotateZ("+v.z+"deg) ";
 }
 
 function scale3d(v) {

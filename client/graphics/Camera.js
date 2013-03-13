@@ -3,7 +3,7 @@
 //
 
 function __CameraUpdateHack(cam) {
-	window.setInterval(function(){cam.Update()}, 100)
+	window.setInterval(function(){cam.Update()}, 70)
 }
 
 function Camera(parent) {

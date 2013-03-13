@@ -9,7 +9,7 @@ var Controls = {
 	down:   40,	// down arrow
 	reload: 17,	// ctrl
 };
-
+var teapot2;
 $(document).ready(function(){
 	var mleft = false, mright = false;
 	var mfoward = false, mbackward = false;
@@ -17,7 +17,7 @@ $(document).ready(function(){
 	var camera = new Camera($("#camera"));
 	var l = new Entity.Load(camera.div, Entity.ModelType.RectModel, "level");
 	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
-//	var teapot2 = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
+//	teapot2 = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
 //	teapot.Translate3d(new Vector3(600,0,0));
 
 	// lock camera to player

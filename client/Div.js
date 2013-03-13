@@ -18,29 +18,29 @@ Div = function(parent) {
 Div.prototype = {
 	Rotate : function(v) {
 		this.rotation.add(v);
-		UpdateTransform();
+		this.UpdateTransform();
 	},
 	SetRotate : function(v) {
 		this.rotation = v;
-		UpdateTransform();
+		this.UpdateTransform();
 	},
 	Translate : function(v) {
 		this.position.add(v);
-		UpdateTransform();
+		this.UpdateTransform();
 	},
 	SetTranslate : function(v) {
 		this.position = v;
-		UpdateTransform();
+		this.UpdateTransform();
 	},
 	css : function(item, val) {
 		$(this.div).css(item, val);
 	},
 	CustomTransform : function(t) {
 		this.transform = t;
-		UpdateTransform();
+		this.UpdateTransform();
 	},
 	UpdateTransform : function() {
-		UpdateByObj(this.div, transform, this.transform);
+		UpdateByObj(this.div, transform, this.transform + " " + translate3d(this.position) + rotate3d(this.rotation));
 	},
 	SetId : function(id) {
 		$(this.div).attr('id', id);

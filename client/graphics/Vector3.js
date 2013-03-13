@@ -27,3 +27,7 @@ Vector3.prototype.sub = function(v) {
 Vector3.prototype.mul = function(v) {
 	this.operate(v, function(x,y) { return x*y });
 }
+
+Vector3.prototype.isZero = function() {
+	return this.x == 0 && this.y == 0 && this.z == 0;
+}

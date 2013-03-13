@@ -15,8 +15,6 @@ namespace('Entity', function()
 				case Entity.ModelType.RectModel:
 					Models[resource] = new Entity.RectModel(modelRoot, resource);
 					break;
-				default:
-					return "Invalid Type";
 			}
 		}
 		
@@ -25,7 +23,10 @@ namespace('Entity', function()
 	
 	Entity.Load.prototype = {
 		Translate3d : function(v) {
-			UpdateByObj(this.Model, transform, translate3d(v));
+			this.Model.SetTranslate(v);
+		},
+		Rotate3d : function(v) {
+			this.Model.SetRotate(v);
 		}
 	}
 
