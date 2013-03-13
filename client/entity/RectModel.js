@@ -63,8 +63,8 @@ namespace('Entity', function () {
 			return div;
 		},
 		
-		Clone : function(parent) {	
-			$(parent).append($(this.div).clone());
+		Clone : function(parent) {
+			$(parent).html($(this.div).html());
 		},
 		
 		CloneQueue : function() {
