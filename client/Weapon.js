@@ -9,7 +9,7 @@ function Weapon(tag, damage, firerate, maxclip, maxres)
 	this.damage   = damage   || 10;
 	this.firerate = firerate || 10;
 	this.maxclip  = maxclip  || 10;
-	this.maxres   = maxres   || 100;
+	this.maxres   = maxres   || this.maxclip * 10;
 
 	this.clipammo = this.maxclip;
 	this.resammo  = this.maxres;
@@ -32,8 +32,8 @@ Weapon.prototype.reload = function()
 		var total = this.clipammo + this.resammo;		
 		var newclip = total < this.maxclip ? total : this.maxclip;
 		
-		this.clipammo = newclip;
 		this.resammo -= newclip - this.clipammo;
+		this.clipammo = newclip;
 	}
 }
 

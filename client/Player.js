@@ -13,6 +13,14 @@ function Player(tag)
 //	this.entity = new Entity("player.obj");
 }
 
+Player.prototype.has_weapon = function() {
+	return typeof(this.cur_weap) !== 'undefined';
+}
+
+Player.prototype.weapon = function() {
+	return this.weapons[this.cur_weap];
+}
+
 Player.prototype.add_weapon = function(weap)
 {
 	// type checking might be helpful
@@ -26,6 +34,10 @@ Player.prototype.add_weapon = function(weap)
 			}
 			return;
 		}
+	}
+	
+	if (!this.has_weapon()) {
+		this.cur_weap = 0;
 	}
 	
 	this.weapons.push(weap);

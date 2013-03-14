@@ -28,6 +28,10 @@ $(document).ready(function(){
 	camera.pos.y = -600;
 	camera.pos.z = 1500;
 	camera.rot.x = 160;
+	
+	local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
+	
+	Hud.update_all(local_plyr);
 
 	var oldx=0, oldy=0, first_mm = true;
 	$(document).mousemove(function(e){
@@ -35,7 +39,7 @@ $(document).ready(function(){
 			first_mm = false;
 		} else {
 			var off=3;
-			local_plyr.rot.y -= (oldx - e.pageX)/off;
+			local_plyr.rot.y += (oldx - e.pageX)/off;
 			local_plyr.rot.x += (oldy - e.pageY)/off;
 		}
 		
@@ -52,8 +56,9 @@ $(document).ready(function(){
 			case Controls.down:  mbackward = true; break;
 
 			case Controls.reload:
-				if (typeof(local_plyr.cur_weap) !== 'undefined') {
-					local_plyr.weapons[local_plyr.cur_weap].reload();
+				if (local_plyr.has_weapon()) {
+					local_plyr.weapon().reload();
+					Hud.update_ammo(local_plyr);
 				}
 				break;
 		};
@@ -67,6 +72,14 @@ $(document).ready(function(){
 			case Controls.right: mright    = false; break;
 			case Controls.down:  mbackward = false; break;
 		};
+	});
+	
+	$(document).click(function(e)
+	{
+		if (local_plyr.has_weapon()) {
+			local_plyr.weapon().fire();
+			Hud.update_ammo(local_plyr);
+		}
 	});
 
 	var speed = 40;	
