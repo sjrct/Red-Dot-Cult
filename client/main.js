@@ -8,34 +8,39 @@ var Controls = {
 	right:  39,	// right arrow
 	down:   40,	// down arrow
 	reload: 17,	// ctrl
+	menu:   27,	// escape
 };
-var teapot2;
+
 $(document).ready(function(){
 	var mleft = false, mright = false;
 	var mfoward = false, mbackward = false;
 	var local_plyr = new Player("You");
 	var camera = new Camera($("#camera"));
-	var l = new Entity.Load(camera.div, Entity.ModelType.RectModel, "plane");
-//	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
-//	teapot2 = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
-//	teapot.Translate3d(new Vector3(600,0,0));
-
-	var lvl = new Level(camera.div, "testlvl");
 
 	// lock camera to player
 	camera.rot = local_plyr.rot;
 	camera.pos = local_plyr.pos;
 	
+	// temporary
+	var lvl = new Level(camera.div, "testlvl");
 	camera.pos.y = -600;
 	camera.pos.z = 1500;
 	camera.rot.x = 160;
-	
 	local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
+
+	// menu setup	
+	var menu = new Hud.Menu();
+	menu.add('hello', function(){console.log("hello")});
+	menu.add('Resume', function(){Hud.stop_menu(); menu_shown=false});
+	var menu_shown = false;
 	
 	Hud.update_all(local_plyr);
 
+	///// handlers begin /////
 	var oldx=0, oldy=0, first_mm = true;
 	$(document).mousemove(function(e){
+		if (menu_shown) return;
+
 		if (first_mm) {
 			first_mm = false;
 		} else {
@@ -57,16 +62,26 @@ $(document).ready(function(){
 			case Controls.down:  mbackward = true; break;
 
 			case Controls.reload:
+				if (menu_shown) return;
+	
 				if (local_plyr.has_weapon()) {
 					local_plyr.weapon().reload();
 					Hud.update_ammo(local_plyr);
 				}
+				break;
+			
+			case Controls.menu:
+				if (menu_shown) Hud.stop_menu();
+				else Hud.set_menu(menu);
+				menu_shown = !menu_shown;
 				break;
 		};
 	});
 
 	$(document).keyup(function(e)
 	{
+		if (menu_shown) return;
+
 		switch(e.keyCode) {
 			case Controls.left:  mleft     = false; break;
 			case Controls.up:    mfoward   = false; break;
@@ -77,6 +92,8 @@ $(document).ready(function(){
 	
 	$(document).click(function(e)
 	{
+		if (menu_shown) return;
+
 		if (local_plyr.has_weapon()) {
 			local_plyr.weapon().fire();
 			Hud.update_ammo(local_plyr);
@@ -86,6 +103,8 @@ $(document).ready(function(){
 	var speed = 40;	
 	window.setInterval(function()
 	{
+		if (menu_shown) return;
+
 		var theta = -local_plyr.rot.y * (Math.PI)/180;
 		var theta2 = theta + (Math.PI/2);
 		var dx = 0, dz = 0;

@@ -63,6 +63,14 @@
 	left:10px;
 }
 
+#topmenu {
+	background-color: #000;
+}
+
+.button {
+	background-color: #fff;
+}
+
 ::-webkit-scrollbar { 
     display: none; 
 }
