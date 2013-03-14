@@ -6,17 +6,15 @@ namespace('Entity', function () {
 		$(div).css("width",  height + "px");
 		$(div).css("position", "absolute");
 		Entity.Utils.applyTexture(div, texture);
-//		applyTexture(texture)
 	
 		UpdateByObj(div, transform_origin, "0% 0%");
-		UpdateByObj(div, transform, translate3d(new Vector(pos)) + rotate3d(new Vector(rot)));
+		UpdateByObj(div, transform, translate3d(new Vector3(pos)) + rotate3d(new Vector3(rot)));
 	
 		return div;
 	}
 
 	Entity.RectModel = function(parent, model) {
-		this.div = document.createElement("div");
-		parent.appendChild(this.div);
+		this.div = new Div(parent);
 		this.model = model;
 		this.queue = [];
 		this.loaded = false;
@@ -25,52 +23,33 @@ namespace('Entity', function () {
 
 	Entity.RectModel.prototype = {
 		Load : function() {
-			UpdateByObj(this.div, transform_style, "preserve-3d");
-			$(this.div).css("position", "relative");
-			$(this.div).css("margin", "0 auto");
-
 			var path = "models/" + this.model + ".js";
-
-			console.log("Loading model " + path);
-			var model = this.model;
-			var div = this.div;
 			var this_ = this;
+			
 			loadScript(path, function() {
-				var start = new Date().getTime();
-				var true_model = eval(model);
+				var true_model = window[this_.model];
 				for(var i = 0; i < true_model.length; i++) {
-					div.appendChild(create_rectangle(true_model[i][0], true_model[i][1],true_model[i][2],true_model[i][3],true_model[i][4]));
+					this_.div.appendChild(create_rectangle(true_model[i][0], true_model[i][1],true_model[i][2],true_model[i][3],true_model[i][4]));
 				}
-				console.log(model + ".js loaded in " + (new Date().getTime() - start)/1000 + "s");
 				this_.CloneQueue();
 			});	
 		},
 		
 		Duplicate : function(parent) {
-			var div = document.createElement('div');
-			
-			parent.appendChild(div);
-						
-			UpdateByObj(div, transform_style, "preserve-3d");
-			$(div).css("position", "relative");
-			$(div).css("margin", "0 auto");
+			var div = new Div(parent);
 			
 			if(this.loaded) {
-				this.Clone(div);
+				this.div.Clone(div);
 			} else {
 				this.queue.push(div);
 			}
 			return div;
 		},
 		
-		Clone : function(parent) {
-			$(parent).html($(this.div).html());
-		},
-		
 		CloneQueue : function() {
 			this.loaded = true;
 			for(var i = 0; i < this.queue.length; i++) {
-				this.Clone(this.queue[i]);
+				this.div.Clone(this.queue[i]);
 			}
 		},
 	};

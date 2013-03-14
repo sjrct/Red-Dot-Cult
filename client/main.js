@@ -15,11 +15,12 @@ $(document).ready(function(){
 	var mfoward = false, mbackward = false;
 	var local_plyr = new Player("You");
 	var camera = new Camera($("#camera"));
-//	var l = new Entity.Load(camera.div, Entity.ModelType.RectModel, "level");
-	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
+	var l = new Entity.Load(camera.div, Entity.ModelType.RectModel, "plane");
+//	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
 //	teapot2 = new Entity.Load(camera.div, Entity.ModelType.TriModel, "teapot");
 //	teapot.Translate3d(new Vector3(600,0,0));
 
+	var lvl = new Level(camera.div, "testlvl");
 
 	// lock camera to player
 	camera.rot = local_plyr.rot;

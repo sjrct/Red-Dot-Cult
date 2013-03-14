@@ -12,16 +12,13 @@ namespace("Entity", function() {
 		this.div.css("margin", "0 auto");
 
 		var path = "models/" + this.model + ".js";
-		console.log("Loading model " + path);
-		
 		var this_ = this;
+
 		loadScript(path, function() {
-			var start = new Date().getTime();
-			var true_model = eval(this_.model);
+			var true_model = window[this_.model];
 			for(var i = 0; i < true_model.length; i++) {
 				this_.div.appendChild(create_triange(true_model[i][0], true_model[i][1],true_model[i][2],true_model[i][3],true_model[i][4],true_model[i][5]));
 			}
-			console.log(model + ".js loaded in " + (new Date().getTime() - start)/1000 + "s");
 			this_.CloneQueue();
 		});	
 	}
@@ -31,7 +28,7 @@ namespace("Entity", function() {
 			var div = new Div(parent);
 			
 			if(this.loaded) {
-				this.Clone(div);
+				this.div.Clone(div);
 			} else {
 				this.queue.push(div);
 			}
