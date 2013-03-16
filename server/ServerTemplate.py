@@ -7,7 +7,7 @@ import tornado.web
 class WSHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         print 'new connection'
-        self.write_message("Hello World")
+        self.write_message("1:Snell Arena;Science Center Showdown;C.A.M.P. Implosion")
       
     def on_message(self, message):
         print 'message received %s' % message

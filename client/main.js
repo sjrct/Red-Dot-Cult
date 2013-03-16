@@ -134,26 +134,44 @@ $(document).ready(function(){
 		);
 	}, 100);
 	
-	/*
-	var socket;  
-	var host = "ws://localhost:8888/ws";  
-	var socket = new WebSocket(host);  
-	function message(foo) {
-		alert(foo);
-	}
-
-	message('<p class="event">Socket Status: '+socket.readyState);  
-
-	socket.onopen = function(){  
-		message('<p class="event">Socket Status: '+socket.readyState+' (open)');  
-	}  
-
-	socket.onmessage = function(msg){
-		message('<p class="message">Received: '+msg.data);  
-		socket.send("hi there!");
-	}
-
-	socket.onclose = function(){  
-		message('<p class="event">Socket Status: '+socket.readyState+' (Closed)');  
-	}  */
+	debug("Connecting...");
+	Socket.Connect(connect);
 });
+
+var Server = {
+	GetArena : 000,
+}
+
+function debug(data) {
+	$("#console").html($("#console").html() + "<br>" + data);
+}
+
+var foo;
+function chooseArena(arena) {
+	Hud.stop_menu();
+	arena = arena.currentTarget.textContent;
+	debug("Chose " + arena);
+	console.log(arena);
+}
+
+function ArenaMenu(list) {
+	debug("Retreived list of active arenas");
+	var menu = new Hud.Menu();
+	var arenas = list.split(";");
+	arenas.forEach(function(arena){
+		menu.add(arena, chooseArena);
+	});
+	Hud.set_menu(menu);
+}
+
+function connect(connected) {
+	if(connected) {
+		debug("Connected to centeral server");
+		debug("Retreiving list of active arenas");
+		Socket.Transaction(Server.GetArena, ArenaMenu);
+	} else {
+		debug("Failed to connect to server");
+	}
+}
+
+
