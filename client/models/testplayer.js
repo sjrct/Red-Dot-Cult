@@ -1,0 +1,4 @@
+testplayer = {
+	teapot: [],
+	
+};

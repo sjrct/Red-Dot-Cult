@@ -1,23 +1,57 @@
 namespace('Entity', function() 
 {
-	Entity.Load = function(parent, type, resource) {
+	function CheckModelRoot() {
 		if(!Utils.IsDefined(modelRoot)) {
 			modelRoot = document.createElement('div');
 			document.body.appendChild(modelRoot);
 			$(modelRoot).css('visibility', 'hidden');
 		}
+	}
 	
-		if(!Utils.IsDefined(Models[resource])) {
-			switch(type) {
+	var queue = [];
+	
+	function LoadModel(resource) {
+		CheckModelRoot();
+		
+		var path = sprintf('models/%1.js', resource);
+		var div = new Div(modelRoot);
+		
+		loadScript(path, function() {
+			CheckModelRoot();
+			
+			// Load the model
+			var true_model = window[resource];
+			switch(true_model.type) {
 				case Entity.ModelType.TriModel:
-					Models[resource] = new Entity.TriModel(modelRoot, resource);
+						Entity.TriModel(div, true_model);
 					break;
 				case Entity.ModelType.RectModel:
-					Models[resource] = new Entity.RectModel(modelRoot, resource);
+						Entity.RectModel(div, true_model);
 					break;
 			}
+			
+			// Done loading, set model and apply to queue
+			Models[resource] = div;
+			for(var i = 0; i < queue[resource].length; i++) {
+				Models[resource].Clone(queue[resource][i]);
+			}
+		});	
+	}
+	
+	Entity.Load = function(parent, resource) {
+		this.Model = new Div(parent);
+		
+		if(!Utils.IsDefined(Models[resource])) {
+			Models[resource] = 'Loading';
+			queue[resource] = [];
+			LoadModel(resource);
 		}
-		this.Model = Models[resource].Duplicate(parent);
+		
+		if(Models[resource] == 'Loading') {
+			queue[resource].push(this.Model);
+		} else {
+			Models[resource].Clone(this.Model);
+		}
 	}
 	
 	Entity.Load.prototype = {

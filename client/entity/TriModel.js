@@ -1,46 +1,13 @@
 namespace("Entity", function() {
 
-	Entity.TriModel = function(parent, model) {
-		this.div = new Div(parent);
-		this.model = model;
-
-		this.div.SetId(model);
+	Entity.TriModel = function(div, model) {
+		div.css("position", "relative");
+		div.css("margin", "0 auto");
 		
-		this.queue = [];
-		this.loaded = false;
-		this.div.css("position", "relative");
-		this.div.css("margin", "0 auto");
-
-		var path = sprintf('models/%1.js', this.model);
-		var this_ = this;
-
-		loadScript(path, function() {
-			var true_model = window[this_.model];
-			for(var i = 0; i < true_model.length; i++) {
-				this_.div.appendChild(create_triange(true_model[i][0], true_model[i][1],true_model[i][2],true_model[i][3],true_model[i][4],true_model[i][5]));
-			}
-			this_.CloneQueue();
-		});	
-	}
-
-	Entity.TriModel.prototype = {
-		Duplicate : function(parent) {
-			var div = new Div(parent);
-			
-			if(this.loaded) {
-				this.div.Clone(div);
-			} else {
-				this.queue.push(div);
-			}
-			return div;
-		},
-		
-		CloneQueue : function() {
-			this.loaded = true;
-			for(var i = 0; i < this.queue.length; i++) {
-				this.div.Clone(this.queue[i]);
-			}
-		},
+		for(var i = 0; i < model.length; i++) {
+			div.appendChild(create_triange(model[i][0], model[i][1], model[i][2], model[i][3], model[i][4], model[i][5]));
+		}
+		return div;
 	}
 	
 	function create_triange(p1,p2,p3,trans,R1,R2) {

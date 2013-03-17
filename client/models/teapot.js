@@ -4575,3 +4575,5 @@ var teapot = [[[0,0,0],
 ],
 
 ];
+
+teapot.type = Entity.ModelType.TriModel;

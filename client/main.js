@@ -161,7 +161,7 @@ function debug(data) {
 function loadArena(lvlname) {
 	var lvl = new Level(camera.div, lvlname);
 	
-	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, 'teapot');
+	var teapot = new Entity.Load(camera.div, 'teapot');
 	
 	var animid = Animation.Create({
 		'0%'	: { transform: translate3d(new Vector3(0,500,0))   + rotate3d(new Vector3(0,0,0)) 	},
