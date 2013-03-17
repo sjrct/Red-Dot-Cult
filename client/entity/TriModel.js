@@ -11,7 +11,7 @@ namespace("Entity", function() {
 		this.div.css("position", "relative");
 		this.div.css("margin", "0 auto");
 
-		var path = "models/" + this.model + ".js";
+		var path = sprintf('models/%1.js', this.model);
 		var this_ = this;
 
 		loadScript(path, function() {
@@ -74,8 +74,8 @@ namespace("Entity", function() {
 		UpdateByObj(svg.svg, transform_origin, "0% 0%");
 		UpdateByObj(svg.svg, transform,
 			translate3d(new Vector3(trans[0]*scale,trans[1]*scale,trans[2]*scale)) + 
-			"rotate3d(" + R1[0] + "," + R1[1] + ","+ R1[2] + ","+ -R1[3] + "rad) " +
-			"rotate3d(" + R2[0] + "," + R2[1] + ","+ R2[2] + ","+ -R2[3] + "rad) " +
+			sprintf('rotate3d(%1,%2,%3,%4rad) ', R1[0], R1[1], R1[2], -R1[3]) +
+			sprintf('rotate3d(%1,%2,%3,%4rad) ', R2[0], R2[1], R2[2], -R2[3]) +
 		"");
 
 		return svg.svg;

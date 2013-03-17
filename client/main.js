@@ -24,11 +24,13 @@ $(document).ready(function(){
 	// temporary
 	var lvl = new Level(camera.div, "testlvl");
 	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, 'teapot');
+	
 	var animid = Animation.Create({
 		'0%'	: { transform: translate3d(new Vector3(0,0,0))   + rotate3d(new Vector3(0,0,0)) 	},
 		'50%'	: { transform: translate3d(new Vector3(500,0,0)) + rotate3d(new Vector3(0,306,0))	},
 		'100%'	: { transform: translate3d(new Vector3(0,0,0))   + rotate3d(new Vector3(360,0,0)) 	},
 	});
+	
 	Animation.Apply(animid, teapot);
 	camera.pos.y = -600;
 	camera.pos.z = 1500;

@@ -6,7 +6,7 @@ namespace('Entity', function () {
 		$(div).css("width",  height + "px");
 		$(div).css("position", "absolute");
 		Entity.Utils.applyTexture(div, texture);
-	
+		
 		UpdateByObj(div, transform_origin, "0% 0%");
 		UpdateByObj(div, transform, translate3d(new Vector3(pos)) + rotate3d(new Vector3(rot)));
 	
@@ -23,7 +23,7 @@ namespace('Entity', function () {
 
 	Entity.RectModel.prototype = {
 		Load : function() {
-			var path = "models/" + this.model + ".js";
+			var path = sprintf('models/%1.js', this.model);
 			var this_ = this;
 			
 			loadScript(path, function() {

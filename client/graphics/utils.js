@@ -31,7 +31,6 @@ function _init_utils()
 		for(var j = 0, lj = prefixs.length; j < lj; j++)
 		{
 			str = prefixs[j] + _prop_strs[i];
-			console.log(str);
 			if(typeof el.style[str] !== "undefined") {
 			    _prop_strs[i] = str;
 			    break;
@@ -63,21 +62,21 @@ function UpdateByObj(obj, prop, value) {
 }
 
 function translate3d(v) {
-	return "translate3d("+v.x+"px, "+v.y+"px, "+v.z+"px) ";
+	return ptranslate3d(v.x,v.y,v.z);
 }
 
 function ptranslate3d(x,y,z) {
-	return "translate3d("+x+"px, "+y+"px, "+z+"px) ";
+	return sprintf("translate3d(%1px,%2px,%3px) ", x, y, z);
 }
 
 function rotate3d(v) {
-	return  "rotateX("+v.x+"deg) rotateY("+v.y+"deg) rotateZ("+v.z+"deg) ";
+	return sprintf("rotateX(%1deg) rotateY(%2deg) rotateZ(%3deg) ", v.x, v.y, v.z);
 }
 
 function scale3d(v) {
-	return "scale3d("+v.x+","+v.y+","+v.z+")";
+	return sprintf("scale3d(%1px,%2px,%3px) ", v.x, v.y, v.z);
 }
 
 function skew3d(v) {
-	return "skewX("+v.x+"deg) skewY("+v.y+"deg) skewZ("+v.z+"deg) ";
+	return sprintf("skewX(%1deg) skewX(%2deg) skewX(%3deg) ", v.x, v.y, v.z);
 }

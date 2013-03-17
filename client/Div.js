@@ -61,7 +61,7 @@ Div.prototype = {
 		}
 	},
 	ApplyAnimation : function(id, duration, count) {
-		UpdateByObj(this.div, animation, ' '+id+' '+duration+'s linear '+count);
+		UpdateByObj(this.div, animation, sprintf(' %1 %2s linear %3', id, duration, count));
 		UpdateByObj(this.div, animation_play_state, 'running');
 		this.animationRunning = true;
 	},

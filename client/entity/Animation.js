@@ -20,15 +20,13 @@ namespace("Animation", function() {
 		for(key in rules) {
 			str += key + ' { ';
 			for(sty in rules[key]) {
-				str += PropertyString(sty) + ': ' + rules[key][sty] + "; ";
+				str += sprintf("%1: %2; ", PropertyString(sty), rules[key][sty]);
 			}
 			str += '} \n';
 		}
-		str = "@-webkit-keyframes " + name + " { " + str + " }";
-		console.log(str);
+		str = sprintf("@-webkit-keyframes %1 { %2 }", name, str);
 		var anim = document.createTextNode(str);
 		$(style).append(anim);
-		console.log(style);
 		
 		return name;
 	}
