@@ -160,7 +160,7 @@ function debug(data) {
 
 function loadArena(lvlname) {
 	var lvl = new Level(camera.div, lvlname);
-	
+	/*
 	var teapot = new Entity.Load(camera.div, 'teapot');
 	
 	var animid = Animation.Create({
@@ -169,7 +169,8 @@ function loadArena(lvlname) {
 		'100%'	: { transform: translate3d(new Vector3(0,500,0))   + rotate3d(new Vector3(360,0,0)) 	},
 	});
 	
-	Animation.Apply(animid, teapot);
+	Animation.Apply(animid, teapot);*/
+	var test = new Entity.Load(camera.div, 'testplayer');
 }
 
 function chooseArena(arena) {
