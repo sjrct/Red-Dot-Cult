@@ -13,10 +13,12 @@ namespace("Entity", function () {
 			var obj = model.objects[object];
 			var ent = new Entity.Load(div, obj.model);
 			ent.Model.SetId(obj.name);
+			Animation.Apply(animations[obj.animation], ent);
 			ent.Translate3d(obj.location);
 			ent.Rotate3d(obj.rotation);
-			Animation.Apply(animations[obj.animation], ent);
-			deps.push(obj.model);
+			if(deps.indexOf(obj.model) == -1) {
+				deps.push(obj.model);
+			}
 		}
 		
 		return deps;
