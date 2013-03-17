@@ -17,7 +17,6 @@ namespace('Entity', function()
 					break;
 			}
 		}
-		
 		this.Model = Models[resource].Duplicate(parent);
 	}
 	

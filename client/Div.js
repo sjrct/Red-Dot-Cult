@@ -13,6 +13,7 @@ Div = function(parent) {
 	this.css("margin", "0 auto");
 	
 	this.transform = "";
+	this.animationRunning = false;
 }
 
 Div.prototype = {
@@ -58,5 +59,25 @@ Div.prototype = {
 		} else {
 			$(parent).html($(this.div).html());
 		}
+	},
+	ApplyAnimation : function(id, duration, count) {
+		UpdateByObj(this.div, animation, ' '+id+' '+duration+'s linear '+count);
+		UpdateByObj(this.div, animation_play_state, 'running');
+		this.animationRunning = true;
+	},
+	ToggleAnimation : function() {
+		if (this.animationRunning) {
+			UpdateByObj(this.div, animation_play_state, 'paused');
+			console.log('pause');
+		} else {
+			UpdateByObj(this.div, animation_play_state, 'running');
+			console.log('play');
+		}
+		this.animationRunning = !this.animationRunning;
+	},
+	ClearAnimation : function() {
+		UpdateByObj(this.div, animation, '');
+		UpdateByObj(this.div, animation_play_state, '');
+		this.animationRunning = false;
 	},
 }
