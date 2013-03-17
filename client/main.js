@@ -2,36 +2,39 @@
 // main.js
 //
 
-var Controls = {
+/*var Controls = {
 	left:   37,	// left arrow
 	up:     38,	// up arrow
 	right:  39,	// right arrow
 	down:   40,	// down arrow
 	reload: 17,	// ctrl
 	menu:   27,	// escape
+};*/
+
+var Controls = {
+	left:   65,	// left arrow
+	up:     87,	// up arrow
+	right:  68,	// right arrow
+	down:   83,	// down arrow
+	reload: 17,	// ctrl
+	menu:   27,	// escape
 };
 
+var camera
+
 $(document).ready(function(){
+	var html = jQuery('html');	
+	html.css('overflow', 'hidden');
+	
 	var mleft = false, mright = false;
 	var mfoward = false, mbackward = false;
 	var local_plyr = new Player("You");
-	var camera = new Camera($("#camera"));
+	camera = new Camera($("#camera"));
 
 	// lock camera to player
 	camera.rot = local_plyr.rot;
 	camera.pos = local_plyr.pos;
 	
-	// temporary
-	var lvl = new Level(camera.div, "testlvl");
-	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, 'teapot');
-	
-	var animid = Animation.Create({
-		'0%'	: { transform: translate3d(new Vector3(0,0,0))   + rotate3d(new Vector3(0,0,0)) 	},
-		'50%'	: { transform: translate3d(new Vector3(500,0,0)) + rotate3d(new Vector3(0,306,0))	},
-		'100%'	: { transform: translate3d(new Vector3(0,0,0))   + rotate3d(new Vector3(360,0,0)) 	},
-	});
-	
-	Animation.Apply(animid, teapot);
 	camera.pos.y = -600;
 	camera.pos.z = 1500;
 	camera.rot.x = 160;
@@ -40,15 +43,14 @@ $(document).ready(function(){
 	// menu setup	
 	var menu = new Hud.Menu();
 	menu.add('hello', function(){console.log("hello")});
-	menu.add('Resume', function(){Hud.stop_menu(); menu_shown=false});
-	var menu_shown = false;
+	menu.add('Resume', function(){Hud.stop_menu();});
 	
 	Hud.update_all(local_plyr);
 
 	///// handlers begin /////
 	var oldx=0, oldy=0, first_mm = true;
 	$(document).mousemove(function(e){
-		if (menu_shown) return;
+		if (Hud.menu_shown) return;
 
 		if (first_mm) {
 			first_mm = false;
@@ -71,7 +73,7 @@ $(document).ready(function(){
 			case Controls.down:  mbackward = true; break;
 
 			case Controls.reload:
-				if (menu_shown) return;
+				if (Hud.menu_shown) return;
 	
 				if (local_plyr.has_weapon()) {
 					local_plyr.weapon().reload();
@@ -81,16 +83,15 @@ $(document).ready(function(){
 			
 			case Controls.menu:
 				teapot.Model.ToggleAnimation();
-				if (menu_shown) Hud.stop_menu();
+				if (Hud.menu_shown) Hud.stop_menu();
 				else Hud.set_menu(menu);
-				menu_shown = !menu_shown;
 				break;
 		};
 	});
 
 	$(document).keyup(function(e)
 	{
-		if (menu_shown) return;
+		if (Hud.menu_shown) return;
 
 		switch(e.keyCode) {
 			case Controls.left:  mleft     = false; break;
@@ -102,7 +103,7 @@ $(document).ready(function(){
 	
 	$(document).click(function(e)
 	{
-		if (menu_shown) return;
+		if (Hud.menu_shown) return;
 
 		if (local_plyr.has_weapon()) {
 			local_plyr.weapon().fire();
@@ -113,7 +114,7 @@ $(document).ready(function(){
 	var speed = 40;	
 	window.setInterval(function()
 	{
-		if (menu_shown) return;
+		if (Hud.menu_shown) return;
 
 		var theta = -local_plyr.rot.y * (Math.PI)/180;
 		var theta2 = theta + (Math.PI/2);
@@ -138,30 +139,44 @@ $(document).ready(function(){
 		local_plyr.pos.x += dx;
 		local_plyr.pos.z += dz;
 		
-		$("#dbg").html(
+		/*$("#dbg").html(
 			"cam pos = (" + camera.pos.x + ", " + camera.pos.y + ", " + camera.pos.z + ")<br>" +
 			"cam rot = (" + camera.rot.x + ", " + camera.rot.y + ", " + camera.rot.z + ")<br>"
-		);
-	}, 100);
+		);*/
+	}, 50);
 	
 	debug("Connecting...");
 	Socket.Connect(connect);
 });
 
 var Server = {
-	GetArena : 000,
+	GetArena : 0,
+	ChooseArena : 1,
 }
 
 function debug(data) {
 	$("#console").html($("#console").html() + "<br>" + data);
 }
 
-var foo;
+function loadArena(lvlname) {
+	var lvl = new Level(camera.div, lvlname);
+	
+	var teapot = new Entity.Load(camera.div, Entity.ModelType.TriModel, 'teapot');
+	
+	var animid = Animation.Create({
+		'0%'	: { transform: translate3d(new Vector3(0,500,0))   + rotate3d(new Vector3(0,0,0)) 	},
+		'50%'	: { transform: translate3d(new Vector3(0,500,500)) + rotate3d(new Vector3(0,360,0))	},
+		'100%'	: { transform: translate3d(new Vector3(0,500,0))   + rotate3d(new Vector3(360,0,0)) 	},
+	});
+	
+	Animation.Apply(animid, teapot);
+}
+
 function chooseArena(arena) {
 	Hud.stop_menu();
 	arena = arena.currentTarget.textContent;
 	debug("Chose " + arena);
-	console.log(arena);
+	Socket.Transaction(Server.ChooseArena + ":" + arena, loadArena);
 }
 
 function ArenaMenu(list) {

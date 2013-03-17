@@ -20,7 +20,8 @@ namespace('Hud', function()
 
 		$("#gunhud").html(str);
 	}
-		
+	
+	Hud.menu_shown = false;
 	Hud.set_menu = function(m) {
 		var tm = $("#topmenu");
 		var margin = 15;
@@ -55,6 +56,7 @@ namespace('Hud', function()
 		tm.css('top', sch/2 - height/2);
 		tm.css('width', width);
 		tm.css('height', height);
+		Hud.menu_shown = true;
 	}
 	
 	Hud.stop_menu = function() {
@@ -65,6 +67,7 @@ namespace('Hud', function()
 		
 		$("#topmenu").css('width', 0);
 		$("#topmenu").css('height', 0);
+		Hud.menu_shown = false;
 	}
 	
 	Hud.Menu = function() {
