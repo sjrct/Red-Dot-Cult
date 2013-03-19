@@ -4,81 +4,138 @@
 
 namespace('Hud', function()
 {
-	Hud.update_all = function(p) {
-		Hud.update_ammo(p);
-	}
-
-	Hud.update_ammo = function(plyr) {
-		var str;
-
-		if (plyr.has_weapon()) {
-			var w = plyr.weapon();
-			str = w.tag + ": " + w.clipammo + "/" + w.maxclip + " " + w.resammo;
-		} else {
-			str = "No Weapon";
-		}
-
-		$("#gunhud").html(str);
+	var menu_shown;
+	
+	Hud.Shown = function () {
+		return menu_shown;
 	}
 	
-	Hud.menu_shown = false;
-	Hud.set_menu = function(m) {
-		var tm = $("#topmenu");
-		var margin = 15;
-		var padding = 5;
-		var width = 0;
-		var height = margin;
-		Hud.stop_menu();
-
-		tm.css('width', 'auto');
-		tm.css('height', 'auto');
+	Hud.Menu = function (title, buttons) {
+		this.menu = $("<div title='foobar'></div");//$(document.createElement('div'));
 		
-		for (var i = 0; i < m.btn_txt.length; i++) {
-			var d = document.createElement('div');
-			tm.append(d);
-			
-			d.className = 'button';
-			$(d).html(m.btn_txt[i]);
-			$(d).click(m.btn_hdl[i]);
-			$(d).css('margin', margin);
-			$(d).css('padding', padding);
-			
-			width = Math.max(width, $(d).width());
-			height += $(d).height() + margin + padding*2;
-		}
+		this.menu.attr('title', title);
 		
-		var scw = $(document).width();
-		var sch = $(document).height();
+		this.buttons = [];
 		
-		width += margin*2 + padding*2;
-		
-		tm.css('left', scw/2 - width/2);
-		tm.css('top', sch/2 - height/2);
-		tm.css('width', width);
-		tm.css('height', height);
-		Hud.menu_shown = true;
-	}
-	
-	Hud.stop_menu = function() {
-		var tm = document.getElementById("topmenu");
-		while (tm.hasChildNodes()) {
-			tm.removeChild(tm.lastChild);
-		}
-		
-		$("#topmenu").css('width', 0);
-		$("#topmenu").css('height', 0);
-		Hud.menu_shown = false;
-	}
-	
-	Hud.Menu = function() {
-		this.btn_txt = [];
-		this.btn_hdl = [];
+		this.AddButtons(buttons);
 	}
 	
 	Hud.Menu.prototype = {
-		add : function(txt, hdl) {
-			this.btn_txt.push(txt);
-			this.btn_hdl.push(hdl);
+		AddButton : function(button, position) {
+			position = Utils.IsDefined(position) || this.buttons.length;
+			button.menu = this;
+			this.buttons.splice(position, 0, button);
+			this.Update();
+		},
+		AddButtons : function(buttons, position) { //TODO test negatives
+			position = Utils.IsDefined(position) || this.buttons.length;
+			this.buttons.join(this.buttons.slice(0, position), buttons, this.buttons.slice(position));
+			this.Update();
+		},
+		RemoveButton : function(button) {
+			var index = this.buttons.indexOf(button);
+			if(index != -1) {
+				this.buttons.splice(index, 1);
+				this.Update();
+			}
+		},
+		Show : function() {
+			this.menu.dialog({modal:true});
+			menu_shown = true;
+		},
+		Hide : function() {
+			this.menu.dialog('close');
+			menu_shown = false;
+		},
+		Update : function() {
+			for(var id in this.buttons) {
+				this.menu.append(this.buttons[id].button);
+			}
 		}
-	};
+	}
+	
+	// args = {text: value, visible: value, click: function(button)}
+	Hud.Menu.Button = function(args) {
+		this.button = $(document.createElement('input'));
+		this.button.attr('type', 'button');
+		this.button.attr('value', args.text);
+		
+		if(Utils.IsDefined(args.visibile)) {
+			args.visibile ? this.Show() : this.Hide();
+		}
+		if(Utils.IsDefined(args.enabled)) {
+			args.enabled ? this.Enable() : this.Disable();
+		}
+		
+		var btn = this;
+		this.button.button().click(function(event) 
+		{
+			args.click(args.text);
+			btn.menu.Hide();
+		});
+		
+		this.menu = undefined; //set when added to menu
+	}
+	
+	Hud.Menu.Button.prototype = {
+		Show : function() {
+			this.button.css('visibility', 'visible');
+		},
+		Hide : function() {
+			this.button.css('visibility', 'hidden');
+		},
+		Enable : function() {
+			this.button.attr('enabled', true);
+		},
+		Disable : function() {
+			this.button.attr('enabled', false);
+		},
+		Text : function(text) {
+			this.button.html(text);
+		}
+	}
+	
+	Hud.Area = function (text) {
+		this.div = $(document.createElement('div'));
+		$("#hud").append(this.div);
+		this.div.draggable({containment : "parent"});
+		this.Text(text || "");
+	}
+	
+	Hud.Area.prototype = {
+		Text : function (text) {
+			if(Utils.IsDefined(text)) {
+				this.text = text;
+				$(this.div).html(this.text);
+			} else {
+				return this.text;
+			}
+		},
+		Append : function(text) {
+			this.text += "<br>" + text;
+			$(this.div).html(this.text);
+		},
+		Position : function(x,y) {
+			this.div.css("left", x);
+			this.div.css("top", y);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 });

@@ -12,7 +12,7 @@ testplayer = {
 		}
 	},
 	objects: [
-		{ name: 'teapot1', model: 'plane', location: new Vector3(500,0,0), rotation: new Vector3(0,0,0), },
+		{ name: 'static_wall', model: 'plane', location: new Vector3(500,0,0), rotation: new Vector3(0,0,0), },
 		{ name: 'door', model: 'plane', location: new Vector3(500,0,0), rotation: new Vector3(0,0,0), animation: 'test2' },
 	],
 };

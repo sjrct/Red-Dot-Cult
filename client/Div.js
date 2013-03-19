@@ -1,7 +1,9 @@
 Div = function(parent) {
 	this.parent = parent;
 	this.div = document.createElement('div');
-	parent.appendChild(this.div);
+	if(Utils.IsDefined(parent)) {
+		parent.appendChild(this.div);
+	}
 	
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
@@ -49,7 +51,7 @@ Div.prototype = {
 	appendChild : function(child) {
 		if(Utils.IsDefined(child.div)) {
 			this.div.appendChild(child.div);
-		}else {
+		} else {
 			this.div.appendChild(child);
 		}
 	},
@@ -80,4 +82,7 @@ Div.prototype = {
 		UpdateByObj(this.div, animation_play_state, '');
 		this.animationRunning = false;
 	},
+	html : function () {
+		$(this.div).html(arguments);
+	}
 }

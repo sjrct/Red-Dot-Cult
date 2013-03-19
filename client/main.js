@@ -20,11 +20,15 @@ var Controls = {
 	menu:   27,	// escape
 };
 
-var camera
+var camera;
+
+var console;
 
 $(document).ready(function(){
 	var html = jQuery('html');	
 	html.css('overflow', 'hidden');
+	
+	console = new Hud.Area();
 	
 	var mleft = false, mright = false;
 	var mfoward = false, mbackward = false;
@@ -40,17 +44,12 @@ $(document).ready(function(){
 	camera.rot.x = 160;
 	local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
 
-	// menu setup	
-	var menu = new Hud.Menu();
-	menu.add('hello', function(){console.log("hello")});
-	menu.add('Resume', function(){Hud.stop_menu();});
-	
-	Hud.update_all(local_plyr);
+//	Hud.update_all(local_plyr);
 
 	///// handlers begin /////
 	var oldx=0, oldy=0, first_mm = true;
 	$(document).mousemove(function(e){
-		if (Hud.menu_shown) return;
+		if (Hud.Shown()) return;
 
 		if (first_mm) {
 			first_mm = false;
@@ -73,25 +72,25 @@ $(document).ready(function(){
 			case Controls.down:  mbackward = true; break;
 
 			case Controls.reload:
-				if (Hud.menu_shown) return;
+				if (Hud.Shown()) return;
 	
 				if (local_plyr.has_weapon()) {
 					local_plyr.weapon().reload();
-					Hud.update_ammo(local_plyr);
+//					Hud.update_ammo(local_plyr);
 				}
 				break;
 			
 			case Controls.menu:
-				teapot.Model.ToggleAnimation();
-				if (Hud.menu_shown) Hud.stop_menu();
-				else Hud.set_menu(menu);
+//				teapot.Model.ToggleAnimation();
+//				if (Hud.menu_shown) Hud.stop_menu();
+//				else Hud.set_menu(menu);
 				break;
 		};
 	});
 
 	$(document).keyup(function(e)
 	{
-		if (Hud.menu_shown) return;
+		if (Hud.Shown()) return;
 
 		switch(e.keyCode) {
 			case Controls.left:  mleft     = false; break;
@@ -103,18 +102,18 @@ $(document).ready(function(){
 	
 	$(document).click(function(e)
 	{
-		if (Hud.menu_shown) return;
+		if (Hud.Shown()) return;
 
 		if (local_plyr.has_weapon()) {
 			local_plyr.weapon().fire();
-			Hud.update_ammo(local_plyr);
+//			Hud.update_ammo(local_plyr);
 		}
 	});
 
 	var speed = 40;	
 	window.setInterval(function()
 	{
-		if (Hud.menu_shown) return;
+		if (Hud.Shown()) return;
 
 		var theta = -local_plyr.rot.y * (Math.PI)/180;
 		var theta2 = theta + (Math.PI/2);
@@ -145,17 +144,13 @@ $(document).ready(function(){
 		);*/
 	}, 50);
 	
-	debug("Connecting...");
+	console.Append("Connecting...");
 	Socket.Connect(connect);
 });
 
 var Server = {
 	GetArena : 0,
 	ChooseArena : 1,
-}
-
-function debug(data) {
-	$("#console").html($("#console").html() + "<br>" + data);
 }
 
 function loadArena(lvlname) {
@@ -174,29 +169,27 @@ function loadArena(lvlname) {
 }
 
 function chooseArena(arena) {
-	Hud.stop_menu();
-	arena = arena.currentTarget.textContent;
-	debug("Chose " + arena);
+	console.Append("Chose " + arena);
 	Socket.Transaction(Server.ChooseArena + ":" + arena, loadArena);
 }
 
 function ArenaMenu(list) {
-	debug("Retreived list of active arenas");
-	var menu = new Hud.Menu();
+	console.Append("Retreived list of active arenas");
+	var menu = new Hud.Menu('Select a Arena');
 	var arenas = list.split(";");
 	arenas.forEach(function(arena){
-		menu.add(arena, chooseArena);
+		menu.AddButton(new Hud.Menu.Button({text: arena, click: chooseArena }));
 	});
-	Hud.set_menu(menu);
+	menu.Show();
 }
 
 function connect(connected) {
 	if(connected) {
-		debug("Connected to centeral server");
-		debug("Retreiving list of active arenas");
+		console.Append("Connected to centeral server");
+		console.Append("Retreiving list of active arenas");
 		Socket.Transaction(Server.GetArena, ArenaMenu);
 	} else {
-		debug("Failed to connect to server");
+		console.Append("Failed to connect to server");
 	}
 }
 
