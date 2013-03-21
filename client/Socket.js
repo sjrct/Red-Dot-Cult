@@ -29,8 +29,9 @@ namespace("Socket", function()
 				mults[id](message);
 			} else if (Utils.IsDefined(ones[id])) {
 				ones[id](message);
+				ones.splice(id, 1);
 			} else {
-				alert("Invalid transaction id: " + id);
+				console.log("Unhandled Message " + message);
 			}
 			
 		} else {
@@ -76,5 +77,9 @@ namespace("Socket", function()
 	
 	Socket.Transaction = function (data, func) {
 		Socket.ReceiveOne(Socket.Send(data), func);
+	}
+	
+	Socket.TransactionMany = function (data, func) {
+		Socket.ReceiveMany(Socket.Send(data), func);
 	}
 });

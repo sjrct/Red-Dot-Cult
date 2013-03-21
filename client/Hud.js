@@ -18,6 +18,8 @@ namespace('Hud', function()
 		this.buttons = [];
 		
 		this.AddButtons(buttons);
+		
+		this.shown = false;
 	}
 	
 	Hud.Menu.prototype = {
@@ -42,10 +44,12 @@ namespace('Hud', function()
 		Show : function() {
 			this.menu.dialog({modal:true});
 			menu_shown = true;
+			this.shown = true;
 		},
 		Hide : function() {
 			this.menu.dialog('close');
 			menu_shown = false;
+			this.shown = false;
 		},
 		Update : function() {
 			for(var id in this.buttons) {
