@@ -5,16 +5,26 @@ namespace('Entity', function () {
 		div.css("margin", "0 auto");
 		
 		for(var i = 0; i < model.length; i++) {
-			div.appendChild(create_rectangle(model[i][0], model[i][1], model[i][2], model[i][3], model[i][4]));
+			div.appendChild(
+				create_rectangle(
+					model[i].position,
+					model[i].rotation,
+					model[i].size,
+					model[i].style
+			));
 		}
 		return div;
 	}
 	
-	function create_rectangle(pos, rot, width, height, texture) {
+	function create_rectangle(pos, rot, size, texture) {
 		var div = document.createElement('div');
-	
-		$(div).css("height", width + "px");
-		$(div).css("width",  height + "px");
+		
+		var border = parseInt(texture.border);
+		var border = border == NaN ? 0 : border;
+		
+		
+		$(div).css("height", (size[1]-border*2) + "px");
+		$(div).css("width",  (size[0]-border*2) + "px");
 		$(div).css("position", "absolute");
 		Entity.Utils.applyTexture(div, texture);
 		
@@ -23,11 +33,4 @@ namespace('Entity', function () {
 		
 		return div;
 	}
-
-
-	Entity.RectModel.prototype = {
-		Clone : function(parent) {
-			this.div.Clone(parent);
-		}
-	};
 });
