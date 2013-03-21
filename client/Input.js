@@ -19,10 +19,18 @@ namespace("Input", function() {
 			if (first_mm) {
 				first_mm = false;
 			} else {
-				var xoff=3.5;
-				var yoff=2.5;
+				var xoff=4.5;
+				var yoff=4.5;
 				mouse.y += (oldx - e.pageX)/yoff;
 				mouse.x += (oldy - e.pageY)/xoff;
+			}
+			if(e.pageX +1 == $("#camera").width()) {
+				console.log(e.pageX);
+				mouse.y-=2;
+			}
+			if(e.pageX == 0) {
+				console.log(e.pageX);
+				mouse.y+=2;
 			}
 			oldx = e.pageX;
 			oldy = e.pageY;

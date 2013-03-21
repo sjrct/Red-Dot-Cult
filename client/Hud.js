@@ -2,6 +2,8 @@
 // hud.js
 //
 
+$(document.body).css('cursor', 'none');
+
 namespace('Hud', function()
 {
 	var menu_shown;
@@ -45,11 +47,13 @@ namespace('Hud', function()
 			this.menu.dialog({modal:true});
 			menu_shown = true;
 			this.shown = true;
+			$(document.body).css('cursor', 'auto');
 		},
 		Hide : function() {
 			this.menu.dialog('close');
 			menu_shown = false;
 			this.shown = false;
+			$(document.body).css('cursor', 'none');
 		},
 		Update : function() {
 			for(var id in this.buttons) {
