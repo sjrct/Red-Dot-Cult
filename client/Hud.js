@@ -105,6 +105,7 @@ namespace('Hud', function()
 	
 	Hud.Area = function (text) {
 		this.div = $(document.createElement('div'));
+		this.div.css('color', "#0c0")
 		$("#hud").append(this.div);
 		this.div.draggable({containment : "parent"});
 		this.Text(text || "");

@@ -39,7 +39,7 @@ html {
 	left: 0px;
 	top: 0px;
 
-	background-color:#eee;
+	background-color:#555;
 }
 
 .hud {
@@ -55,23 +55,11 @@ html {
 	user-select: none;
 }
 
-#dbg {
-	left:10px;
-	top:10px;
-}
-
-#gunhud {
-	float: left;
-	bottom:10px;
-	left:10px;
-}
-
-#topmenu {
-	background-color: #000;
-}
-
-.button {
-	background-color: #fff;
+.crosshairs {
+	top:50%;
+	left:50%;
+	font-size:20pt;
+	color:#0c0;
 }
 
 ::-webkit-scrollbar { 

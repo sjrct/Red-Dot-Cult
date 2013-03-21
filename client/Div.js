@@ -13,7 +13,6 @@ Div = function(parent) {
 	
 	this.css("position", "relative");
 	this.css("margin", "0 auto");
-	
 	this.transform = "";
 	this.animationRunning = false;
 }
