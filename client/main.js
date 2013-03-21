@@ -2,15 +2,6 @@
 // main.js
 //
 
-/*var Controls = {
-	left:   37,	// left arrow
-	up:     38,	// up arrow
-	right:  39,	// right arrow
-	down:   40,	// down arrow
-	reload: 17,	// ctrl
-	menu:   27,	// escape
-};*/
-
 var Controls = {
 	left:   65,	// left arrow
 	up:     87,	// up arrow
@@ -22,13 +13,13 @@ var Controls = {
 
 var camera;
 
-var console;
+var Console;
 
 $(document).ready(function(){
 	var html = jQuery('html');	
 	html.css('overflow', 'hidden');
 	
-	console = new Hud.Area();
+	Console = new Hud.Area();
 	
 	var mleft = false, mright = false;
 	var mfoward = false, mbackward = false;
@@ -54,9 +45,10 @@ $(document).ready(function(){
 		if (first_mm) {
 			first_mm = false;
 		} else {
-			var off=3;
-			local_plyr.rot.y += (oldx - e.pageX)/off;
-			local_plyr.rot.x += (oldy - e.pageY)/off;
+			var xoff=3.5;
+			var yoff=2.5;
+			local_plyr.rot.y += (oldx - e.pageX)/yoff;
+			local_plyr.rot.x += (oldy - e.pageY)/xoff;
 		}
 		
 		oldx = e.pageX;
@@ -110,7 +102,7 @@ $(document).ready(function(){
 		}
 	});
 
-	var speed = 40;	
+	var speed = 80;	
 	window.setInterval(function()
 	{
 		if (Hud.Shown()) return;
@@ -144,7 +136,7 @@ $(document).ready(function(){
 		);*/
 	}, 50);
 	
-	console.Append("Connecting...");
+	Console.Append("Connecting...");
 	Socket.Connect(connect);
 });
 
@@ -165,16 +157,16 @@ function loadArena(lvlname) {
 	});
 	
 	Animation.Apply(animid, teapot);*/
-	var test = new Entity.Load(camera.div, 'testplayer');
+//	var test = new Entity.Load(camera.div, 'testplayer');
 }
 
 function chooseArena(arena) {
-	console.Append("Chose " + arena);
+	Console.Append("Chose " + arena);
 	Socket.Transaction(Server.ChooseArena + ":" + arena, loadArena);
 }
 
 function ArenaMenu(list) {
-	console.Append("Retreived list of active arenas");
+	Console.Append("Retreived list of active arenas");
 	var menu = new Hud.Menu('Select a Arena');
 	var arenas = list.split(";");
 	arenas.forEach(function(arena){
@@ -185,11 +177,11 @@ function ArenaMenu(list) {
 
 function connect(connected) {
 	if(connected) {
-		console.Append("Connected to centeral server");
-		console.Append("Retreiving list of active arenas");
+		Console.Append("Connected to centeral server");
+		Console.Append("Retreiving list of active arenas");
 		Socket.Transaction(Server.GetArena, ArenaMenu);
 	} else {
-		console.Append("Failed to connect to server");
+		Console.Append("Failed to connect to server");
 	}
 }
 

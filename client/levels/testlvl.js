@@ -1,19 +1,6 @@
 testlvl = {
-	tri_ents : [
-//		['teapot', [0,0,0]]
-	],
-	
-	rect_ents : [
-		['plane', [-500,0,1000], [0,0,0]],
-		
-		['plane', [-500,0,0], [0,90,0]],
-		['plane', [500,0,0], [0,90,0]],
-		['plane', [-500,0,-1000], [90,0,0]], //floor
-		['plane', [-500,1000,-1000], [90,0,0]], //ceiling
-		
-		['plane', [-500,0,1000], [0,90,0]],
-//		['plane', [500,0,1000], [0,90,0]],
-		['plane', [-500,0,0], [90,0,0]], //floor
-		['plane', [-500,1000,0], [90,0,0]], //ceiling
+	entities : [
+		{model: 'corridor', location: new Vector3(0,0,0), rotation: new Vector3(0,0,0)},
+		{model: 'corridor', location: new Vector3(1000,0,1000), rotation: new Vector3(0,180,0)},
 	]
 }

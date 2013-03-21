@@ -14,17 +14,11 @@ function Level(par, level)
 	loadScript(path, function() {
 		var lvl = window[level];
 		
-		for (var i = 0; i < lvl.tri_ents.length; i++) {
-			var x = new Entity.Load(par, lvl.tri_ents[i][0]);
-			x.Translate3d(new Vector3(lvl.tri_ents[i][1]));
-			x.Rotate3d(new Vector3(lvl.tri_ents[i][2]));
-			this_.entities.push(x);
-		}
-
-		for (var i = 0; i < lvl.rect_ents.length; i++) {
-			var x = new Entity.Load(par, lvl.rect_ents[i][0]);
-			x.Translate3d(new Vector3(lvl.rect_ents[i][1]));
-			x.Rotate3d(new Vector3(lvl.rect_ents[i][2]));
+		for (var i = 0; i < lvl.entities.length; i++) {
+			var ent = lvl.entities[i];
+			var x = new Entity.Load(par, ent.model);
+			x.Translate3d(ent.location);
+			x.Rotate3d(ent.rotation);
 			this_.entities.push(x);
 		}
 	});
