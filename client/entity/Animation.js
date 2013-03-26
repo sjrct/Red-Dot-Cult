@@ -31,8 +31,8 @@ namespace("Animation", function() {
 		return name;
 	}
 	
-	Animation.Apply = function(id, ent) {
-		ent.Model.ApplyAnimation(id, 4, 'infinite');
+	Animation.Apply = function(id, div) {
+		div.ApplyAnimation(id, 4, 'infinite');
 	}
 	
 	Animation.Clear = function(ent) {

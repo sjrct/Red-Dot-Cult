@@ -70,6 +70,7 @@ namespace('Entity', function()
 	
 	Entity.Load = function(parent, resource) {
 		this.Model = new Div(parent);
+		this.ModelAnim = new Div(this.Model);
 		
 		if(!Utils.IsDefined(Models[resource])) {
 			Models[resource] = 'Loading';
@@ -78,9 +79,9 @@ namespace('Entity', function()
 		}
 		
 		if(Models[resource] == 'Loading') {
-			queue[resource].push(this.Model);
+			queue[resource].push(this.ModelAnim);
 		} else {
-			Models[resource].Clone(this.Model);
+			Models[resource].Clone(this.ModelAnim);
 		}
 	}
 	
@@ -90,6 +91,9 @@ namespace('Entity', function()
 		},
 		Rotate3d : function(v) {
 			this.Model.SetRotate(v);
+		},
+		ApplyAnimation : function(anim) {
+			Animation.Apply(anim, this.ModelAnim);
 		}
 	}
 
