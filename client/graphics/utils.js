@@ -21,21 +21,24 @@ var _prop_strs = [
 	'animation-play-state',
 ];
 
+var global_css3_prefix = "";
+
 function _init_utils()
 {
+	var tests = ['-webkit-transform', 'MozTransform', '-o-transform', '-ms-transform'];
 	var prefixs = ['-webkit-', '-moz-', '-o-', '-ms-'];
 	var el = document.createElement('div');
 	
-	for(var i = 0, li = _prop_strs.length; i < li; i++)
+	for(var j = 0; j < prefixs.length; j++)
 	{
-		for(var j = 0, lj = prefixs.length; j < lj; j++)
-		{
-			str = prefixs[j] + _prop_strs[i];
-			if(typeof el.style[str] !== "undefined") {
-			    _prop_strs[i] = str;
-			    break;
-			}
+		if(Utils.IsDefined(el.style[tests[j]])) {
+		    global_css3_prefix = prefixs[j];
 		}
+	}
+	
+	for(var i = 0; i < _prop_strs.length; i++)
+	{
+		_prop_strs[i] = global_css3_prefix + _prop_strs[i];
 	}
 }
 _init_utils();
@@ -58,7 +61,8 @@ function PropertyString(prop) {
 }
 
 function UpdateByObj(obj, prop, value) {
-	obj.style[_prop_strs[prop]] = value;
+//	obj.style[_prop_strs[prop]] = value;
+	$(obj).css(_prop_strs[prop], value);
 }
 
 function translate3d(v) {

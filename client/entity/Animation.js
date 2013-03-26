@@ -24,7 +24,7 @@ namespace("Animation", function() {
 			}
 			str += '} \n';
 		}
-		str = sprintf("@-webkit-keyframes %1 { %2 }", name, str);
+		str = sprintf("@%3keyframes %1 { %2 }", name, str, global_css3_prefix);
 		var anim = document.createTextNode(str);
 		$(style).append(anim);
 		
