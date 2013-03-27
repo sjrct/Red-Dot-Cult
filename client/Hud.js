@@ -6,103 +6,79 @@ $(document.body).css('cursor', 'none');
 
 namespace('Hud', function()
 {
-	var menu_shown;
+	var menu_shown = false;
 	
-	Hud.Shown = function () {
+	Hud.MenuShown = function () {
 		return menu_shown;
 	}
-	
-	Hud.Menu = function (title, buttons) {
-		this.menu = $("<div title='foobar'></div");//$(document.createElement('div'));
 		
-		this.menu.attr('title', title);
-		
-		this.buttons = [];
-		
-		this.AddButtons(buttons);
-		
+	Hud.Menu = function (title) {
+		this.menu = document.createElement('div');
+		this.menu.title = title;
 		this.shown = false;
+
+		var this_ = this;
+		$(this.menu).dialog({
+			modal: true,
+			closeOnEscape: false,
+			autoOpen: false,
+			
+			close: function () {
+				if (this_.shown) {
+					$(document.body).css('cursor', 'none');
+					this_.shown = false;
+					menu_shown = false;
+				}
+			},
+			
+			open: function () {
+				if (!menu_shown) {
+					$(document.body).css('cursor', 'auto');
+					this_.shown = true;
+					menu_shown = true;
+					Hud.current_menu = this_;
+				}
+			}
+		});
 	}
 	
 	Hud.Menu.prototype = {
-		AddButton : function(button, position) {
-			position = Utils.IsDefined(position) || this.buttons.length;
-			button.menu = this;
-			this.buttons.splice(position, 0, button);
-			this.Update();
+		Open : function() {
+			$(this.menu).dialog('open');
 		},
-		AddButtons : function(buttons, position) { //TODO test negatives
-			position = Utils.IsDefined(position) || this.buttons.length;
-			this.buttons.join(this.buttons.slice(0, position), buttons, this.buttons.slice(position));
-			this.Update();
+		
+		Close : function() {
+			$(this.menu).dialog('close');
 		},
-		RemoveButton : function(button) {
-			var index = this.buttons.indexOf(button);
-			if(index != -1) {
-				this.buttons.splice(index, 1);
-				this.Update();
-			}
-		},
-		Show : function() {
-			this.menu.dialog({modal:true});
-			menu_shown = true;
-			this.shown = true;
-			$(document.body).css('cursor', 'auto');
-		},
-		Hide : function() {
-			this.menu.dialog('close');
-			menu_shown = false;
-			this.shown = false;
-			$(document.body).css('cursor', 'none');
-		},
-		Update : function() {
-			for(var id in this.buttons) {
-				this.menu.append(this.buttons[id].button);
-			}
+		
+		Add : function(text, click) {
+			return new Hud.Menu.Button(text, click, this);
 		}
 	}
-	
-	// args = {text: value, visible: value, click: function(button)}
-	Hud.Menu.Button = function(args) {
-		this.button = $(document.createElement('input'));
-		this.button.attr('type', 'button');
-		this.button.attr('value', args.text);
-		
-		if(Utils.IsDefined(args.visibile)) {
-			args.visibile ? this.Show() : this.Hide();
-		}
-		if(Utils.IsDefined(args.enabled)) {
-			args.enabled ? this.Enable() : this.Disable();
-		}
+
+	Hud.Menu.Button = function(text, click, menu) {
+		this.button = document.createElement('input');
+		$(this.button).attr('type', 'button');
+		$(this.button).attr('value', text);
+		this.text = text;
+		this.menu = menu;
 		
 		var btn = this;
-		this.button.button().click(function(event) 
-		{
-			args.click(args.text);
-			btn.menu.Hide();
+		$(this.button).button().click(function(event) {
+			click(btn);
 		});
 		
-		this.menu = undefined; //set when added to menu
+		$(menu.menu).append(this.button);
+		$(menu.menu).append('<br>');
 	}
 	
 	Hud.Menu.Button.prototype = {
-		Show : function() {
-			this.button.css('visibility', 'visible');
-		},
-		Hide : function() {
-			this.button.css('visibility', 'hidden');
-		},
-		Enable : function() {
-			this.button.attr('enabled', true);
-		},
-		Disable : function() {
-			this.button.attr('enabled', false);
-		},
-		Text : function(text) {
-			this.button.html(text);
+		SetText : function(text) {
+			$(this.button).attr('value', text);
+			this.text = text;
 		}
 	}
-	
+
 	Hud.Area = function (text) {
 		this.div = $(document.createElement('div'));
 		this.div.css('color', "#0c0")
@@ -129,22 +105,4 @@ namespace('Hud', function()
 			this.div.css("top", y);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 });

@@ -30,9 +30,10 @@ function StartGame(lvlname) {
 	Game = new Game(lvlname);
 }
 
-function chooseArena(arena) {
-	Console.Append("Chose " + arena);
-	Socket.Transaction(Server.ChooseArena + ":" + arena, StartGame);
+function chooseArena(btn) {
+	Console.Append("Chose " + btn.text);
+	Socket.Transaction(Server.ChooseArena + ":" + btn.text, StartGame);
+	btn.menu.Close();
 }
 
 function ArenaMenu(list) {
@@ -40,9 +41,9 @@ function ArenaMenu(list) {
 	var menu = new Hud.Menu('Select a Arena');
 	var arenas = list.split(";");
 	arenas.forEach(function(arena){
-		menu.AddButton(new Hud.Menu.Button({text: arena, click: chooseArena }));
+		menu.Add(arena, chooseArena);
 	});
-	menu.Show();
+	menu.Open();
 }
 
 function connect(connected) {
