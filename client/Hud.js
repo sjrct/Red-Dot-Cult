@@ -6,12 +6,12 @@ $(document.body).css('cursor', 'none');
 
 namespace('Hud', function()
 {
-	var menu_shown = false;
+	var menus_open = 0;
 	
 	Hud.MenuShown = function () {
-		return menu_shown;
+		return menus_open > 0;
 	}
-		
+	
 	Hud.Menu = function (title) {
 		this.menu = document.createElement('div');
 		this.menu.title = title;
@@ -25,17 +25,19 @@ namespace('Hud', function()
 			
 			close: function () {
 				if (this_.shown) {
-					$(document.body).css('cursor', 'none');
+					menus_open--;
 					this_.shown = false;
-					menu_shown = false;
+					if (menus_open == 0) {
+						$(document.body).css('cursor', 'none');
+					}
 				}
 			},
 			
 			open: function () {
-				if (!menu_shown) {
-					$(document.body).css('cursor', 'auto');
+				if (!this_.open) {
 					this_.shown = true;
-					menu_shown = true;
+					$(document.body).css('cursor', 'auto');
+					menus_open++;
 					Hud.current_menu = this_;
 				}
 			}
