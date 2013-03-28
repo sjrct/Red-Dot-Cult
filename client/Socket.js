@@ -15,14 +15,10 @@ namespace("Socket", function()
 	var host = "ws://localhost:8888/ws";  
 	var socket = undefined;
 	
-	function message(foo) {
-		console.log(foo);
-	}
-	
 	function receive(data){
-		var str = data.data;
-		var id = parseInt(str.split(':', 1));
-		var message = str.replace(id + ":", '');
+		data = JSON.parse(data.data);
+		id = data.id;
+		message = data.message;
 		
 		if(id != NaN) {
 			if(Utils.IsDefined(mults[id])) {
@@ -31,7 +27,7 @@ namespace("Socket", function()
 				ones[id](message);
 				ones.splice(id, 1);
 			} else {
-				console.log("Unhandled Message " + message);
+				console.log(data);
 			}
 			
 		} else {
@@ -61,9 +57,9 @@ namespace("Socket", function()
 	}
 	
 	var handle = 0;
-	Socket.Send = function(data) {
+	Socket.Send = function(func, data) {
 		handle++;
-		socket.send(handle  + ":" + data);
+		socket.send(JSON.stringify({id: handle, func: func, message: data}));
 		return handle;
 	}
 	
@@ -75,11 +71,11 @@ namespace("Socket", function()
 		mults[handle] = func;
 	}
 	
-	Socket.Transaction = function (data, func) {
-		Socket.ReceiveOne(Socket.Send(data), func);
+	Socket.Transaction = function (func, data, callback) {
+		Socket.ReceiveOne(Socket.Send(func, data), callback);
 	}
 	
-	Socket.TransactionMany = function (data, func) {
-		Socket.ReceiveMany(Socket.Send(data), func);
+	Socket.TransactionMany = function (func, data, callback) {
+		Socket.ReceiveMany(Socket.Send(func, data), callback);
 	}
 });

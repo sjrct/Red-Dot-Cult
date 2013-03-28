@@ -3,107 +3,107 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import math
-
+import json
 from apscheduler.scheduler import Scheduler
 
 hard_messages = ['Snell Arena;Science Center Showdown;C.A.M.P. Implosion', 'testlvl']
 
-class WSHandler(tornado.websocket.WebSocketHandler):
+class Vec3:
+	def __init__(self, x=0, y=0, z=0):
+		self.x = float(x)
+		self.y = float(y)
+		self.z = float(z)
+class Vec2:
+	def __init__(self, x=0, y=0):
+		self.x = float(x)
+		self.y = float(y)
+
+class Keys:
+	def __init__(self):
+		self.forward = False;
+		self.backward = False;
+		self.right = False;
+		self.left = False;
+	
+	def setKey(self, string, state):
+		setattr(self, string, state)
+
+class Message:
+	def __init__(self, string):
+		data = json.loads(string)
+		self.id = data['id']
+		self.func = data['func']
+		self.message = data['message']
+
+class Func:
+	SendState = 0
+	KeyUp = 100
+	KeyDown = 101
+	Fire = 102
+	MousePos = 103
+
+class Player(tornado.websocket.WebSocketHandler):
 	def open(self):
 		self.sched = Scheduler()
 		self.sched.start()
-		self.isrunning = False
 		self.sched.add_interval_job(self.sender, seconds=0.05)
 		
-		self.rotx = 0
-		self.roty = 0
-		self.posx = 160
-		self.posz = 1500
-		self.left = False
-		self.right = False
-		self.up = False
-		self.down = False
+		self.pos = Vec3(160, 600, 1500)
+		self.rot = Vec2(0,0)
+		self.keys = Keys()
 		
-		self.stateback = -1
+		self.pos_transaction = None
 		
 		print 'new connection'
-	
-	def on_message(self, message):
-		split = message.split(":")
-		_id = split[0]
-		func = int(split[1])
-		if len(split) > 2:
-			message = split[2]
 		
-#		print 'message received %s' % message
+	def on_message(self, string):
+		mes = Message(string);
 		
-		if func == 1: #chooseArena
-			self.isrunning = True
-			
-		if func == 2: #send state
-			self.stateback = _id
-			return
-		if func == 100: #kd
-			if message == 'left':
-				self.left = True
-			if message == 'right':
-				self.right = True
-			if message == 'up':
-				self.up = True
-			if message == 'down':
-				self.down = True
-		if func == 101: #ku
-			if message == 'left':
-				self.left = False
-			if message == 'right':
-				self.right = False
-			if message == 'up':
-				self.up = False
-			if message == 'down':
-				self.down = False
+		if mes.func == Func.SendState:
+			self.pos_transaction = mes.id
 		
+		if mes.func == Func.KeyDown:
+			self.keys.setKey(mes.message, True)
 		
-		if func == 103: #mouse pos
-			self.rotx = float(message.split(",")[0])
-			self.roty = float(message.split(",")[1])
+		if mes.func == Func.KeyUp:
+			self.keys.setKey(mes.message, False)
 		
-		if func < 100:
-			self.write_message(_id + ":" + hard_messages[func])
+		if mes.func == Func.Fire:
+			print 'BANG!'
+		
+		if mes.func == Func.MousePos:
+			self.rot = Vec2(mes.message['x'], mes.message['y'])
 		
 	def on_close(self):
 		self.sched.shutdown()
-		self.isrunning = False
 		print 'connection closed'
 	
 	def sender(self):
-		if self.isrunning and self.stateback != -1:
+		if self.pos_transaction != None:
 			speed = 80
-			theta = -self.roty * (math.pi)/180
+			theta = -self.rot.y * (math.pi)/180
 			theta2 = theta + (math.pi/2)
 			dx = 0
 			dz = 0
-			if self.up:
+			if self.keys.forward:
 				dz -= math.cos(theta) * speed
 				dx -= math.sin(theta) * speed
-			if self.down:
+			if self.keys.backward:
 				dz += math.cos(theta) * speed
 				dx += math.sin(theta) * speed
-			if self.right:
+			if self.keys.right:
 				dz -= math.cos(theta2) * speed
 				dx -= math.sin(theta2) * speed
-			if self.left:
+			if self.keys.left:
 				dz += math.cos(theta2) * speed
 				dx += math.sin(theta2) * speed
 			
-			self.posx += dx
-			self.posz += dz
-			
-			message = "{5}:[[{0},{1}],[{2},{3},{4}]]".format(self.rotx, self.roty, self.posx, -600, self.posz, self.stateback)
+			self.pos.x += dx
+			self.pos.z += dz
+			message = json.dumps({'id': self.pos_transaction, 'message': {'x' : -self.pos.x, 'y' : -self.pos.y, 'z' : -self.pos.z}})
 			self.write_message(message)
 
-
-
-application = tornado.web.Application([(r'/ws', WSHandler),])
+application = tornado.web.Application([(r'/ws', Player),])
 
 
 if __name__ == "__main__":

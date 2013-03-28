@@ -12,6 +12,7 @@ namespace("Input", function() {
 			} else {
 				var xoff=4.5;
 				var yoff=4.5;
+				
 				mouse.y += (oldx - e.pageX)/yoff;
 				mouse.x += (oldy - e.pageY)/xoff;
 			}
@@ -25,24 +26,30 @@ namespace("Input", function() {
 			}
 			oldx = e.pageX;
 			oldy = e.pageY;
+			if(Utils.IsDefined(mouse.camera)) {
+				camera.rot = new Vector3(180 + mouse.x, mouse.y, 0);
+			}
 		});
 		
 		window.setInterval(function()
 		{
-			Socket.Send(Server.MousePos + ":" + sprintf('%1,%2', mouse.x.toFixed(2), mouse.y.toFixed(2)));
+			Socket.Send(Server.MousePos, {x : mouse.x.toFixed(2), y: mouse.y.toFixed(2)});
 		}, 80);
 		
 	
 		$(document).click(function(e)
 		{
 			if (Hud.MenuShown()) return;
-			Socket.Send(Server.Fire);
+			Socket.Send(Server.Fire, "");
 		});
 	}
 	
 	Input.Mouse.prototype = {
 		Destroy : function() {
 			
+		},
+		SetCamera : function(camera) {
+			this.camera = camera;
 		}
 	}
 	
@@ -70,7 +77,7 @@ namespace("Input", function() {
 					break;
 				case Number(Settings.control_up):
 					if(!mfoward) {
-						key='up';
+						key='forward';
 						mfoward = true;
 					}
 					break;
@@ -82,7 +89,7 @@ namespace("Input", function() {
 					break;
 				case Number(Settings.control_down):
 					if(!mbackward) {
-						key='down';
+						key='backward';
 						mbackward = true;
 					}
 					break;
@@ -97,7 +104,7 @@ namespace("Input", function() {
 					break;
 			};
 			if(Utils.IsDefined(key)) {
-				Socket.Send(Server.KeyDown + ":" + key);
+				Socket.Send(Server.KeyDown, key);
 			}
 		});
 
@@ -112,7 +119,7 @@ namespace("Input", function() {
 						mleft = false;
 						break;
 				case Number(Settings.control_up):
-						key='up';
+						key='forward';
 						mfoward = false;
 						break;
 				case Number(Settings.control_right):
@@ -120,13 +127,13 @@ namespace("Input", function() {
 						mright = false;
 						break;
 				case Number(Settings.control_down):
-						key='down';
+						key='backward';
 						mbackward = false;
 						break;
 			};
 			
 			if(Utils.IsDefined(key)) {
-				Socket.Send(Server.KeyUp + ":" + key);
+				Socket.Send(Server.KeyUp, key);
 			}
 		});
 	}

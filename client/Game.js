@@ -1,9 +1,7 @@
 var camera;
 
 function UpdateCamera(data) {
-	data = eval(data);
-	camera.rot = new Vector3(180 + data[0][0], data[0][1], 0);
-	camera.pos = new Vector3(data[1]);
+	camera.pos = new Vector3(data.x, data.y, data.z);
 }
 
 function control_button(pretty, key, menu)
@@ -26,13 +24,15 @@ function control_button(pretty, key, menu)
 }
 
 Game = function(level_name) {
-	Socket.TransactionMany(Server.StateBack, UpdateCamera);  //Start the camera position receive
+	Socket.TransactionMany(Server.StateBack, "", UpdateCamera);  //Start the camera position receive
 	
 	camera = new Camera($("#camera"));
 	
 	var level = new Level(camera.div, level_name);
 	var mouse = new Input.Mouse();
 	var keyboard = new Input.Keyboard();
+
+	mouse.SetCamera(camera);
 
 	var pauseMenu = new Hud.Menu('Paused');
 	var optionsMenu = new Hud.Menu('Options');
