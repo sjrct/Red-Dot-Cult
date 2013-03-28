@@ -38,16 +38,34 @@ Game = function(level_name) {
 	var optionsMenu = new Hud.Menu('Options');
 	var controlsMenu = new Hud.Menu('Controls');
 
-	controlsMenu.Add( 'Back', function(btn) { optionsMenu.Open(); controlsMenu.Close(); } );
-	control_button('Move Foward',   'control_up',     controlsMenu);
-	control_button('Move Backward', 'control_down',   controlsMenu);
-	control_button('Move Left',     'control_left',   controlsMenu);
-	control_button('Move Right',    'control_right',  controlsMenu);
-	control_button('Reload',        'control_reload', controlsMenu);
-
-	optionsMenu.Add('Back', function(btn) { pauseMenu.Open(); optionsMenu.Close(); } );
-	optionsMenu.Add('Controls', function() { controlsMenu.Open(); optionsMenu.Close(); } );
+	// controls menu
+	var ctrlbtns = [];
+	var ctrls = [
+		['Move Foward',   'control_up'    ],
+		['Move Backward', 'control_down'  ],
+		['Move Left',     'control_left'  ],
+		['Move Right',    'control_right' ],
+		['Reload',        'control_reload']
+	];
 	
+	for (var i = 0; i < ctrls.length; i++) {
+		ctrlbtns.push(control_button(ctrls[i][0], ctrls[i][1], controlsMenu));
+	}
+	
+	controlsMenu.Add( 'Restore Defaults', function () {
+		Settings.set_defaults();
+		for (var i = 0; i < ctrlbtns.length; i++) {
+			ctrlbtns[i].SetText(ctrls[i][0] + " (" + Settings[ctrls[i][1]] + ")");
+		}
+	});
+	
+	controlsMenu.Add( 'Back', function(btn) { optionsMenu.Open(); controlsMenu.Close(); } );
+
+	// options menu
+	optionsMenu.Add('Controls', function() { controlsMenu.Open(); optionsMenu.Close(); } );
+	optionsMenu.Add('Back', function(btn) { pauseMenu.Open(); optionsMenu.Close(); } );
+	
+	// Pause Menu
 	pauseMenu.Add('Options', function(btn) { optionsMenu.Open(); pauseMenu.Close(); } );
 	pauseMenu.Add('Resume',function(btn){ pauseMenu.Close() } );
 	

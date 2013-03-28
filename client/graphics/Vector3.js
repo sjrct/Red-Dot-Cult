@@ -2,12 +2,19 @@
 // Vector3.js
 //
 
+// Vector3(Array[3])
+// Vector3(Vector3)
+// Vector3(x, y, z)
 function Vector3(x, y, z)
 {
 	if (x instanceof Array) {
 		this.x = x[0];
 		this.y = x[1];
 		this.z = x[2];
+	} else if (x instanceof Vector3) {
+		this.x = x.x;
+		this.y = x.y;
+		this.z = x.z;
 	} else {
 		this.x = x;
 		this.y = y;

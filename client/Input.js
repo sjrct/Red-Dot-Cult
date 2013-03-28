@@ -1,13 +1,4 @@
 namespace("Input", function() {
-//	var Controls = {
-//		left:   65,	// left arrow
-//		up:     87,	// up arrow
-//		right:  68,	// right arrow
-//		down:   83,	// down arrow
-//		reload: 17,	// ctrl
-//		menu:   27,	// escape
-//	};
-
 	Input.Mouse = function() {
 		var oldx=0, oldy=0, first_mm = true;
 		var mouse = this;
