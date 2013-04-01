@@ -22,6 +22,8 @@ var Server = {
 	KeyUp: 101,
 	Fire : 102,
 	MousePos : 103,
+	DisableMovement : 200,
+	EnableMovement : 201,
 }
 
 function connect(connected) {

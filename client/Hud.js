@@ -28,6 +28,7 @@ namespace('Hud', function()
 					menus_open--;
 					this_.shown = false;
 					if (menus_open == 0) {
+						Socket.Send(Server.EnableMovement, key);
 						$(document.body).css('cursor', 'none');
 					}
 				}
@@ -37,6 +38,7 @@ namespace('Hud', function()
 				if (!this_.open) {
 					this_.shown = true;
 					$(document.body).css('cursor', 'auto');
+					Socket.Send(Server.DisableMovement, key);
 					menus_open++;
 					Hud.current_menu = this_;
 				}

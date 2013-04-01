@@ -97,7 +97,7 @@ namespace("Input", function() {
 					key='reload';
 					break;
 			
-				case Number(Settings.control_menu):
+				case Number(Settings.control_menu):			
 					if(Utils.IsDefined(this_.menu)) {
 						this_.menu.Open();
 					}
@@ -110,26 +110,25 @@ namespace("Input", function() {
 
 		$(document).keyup(function(e)
 		{
-			if (Hud.MenuShown()) return;
 			var key;
 
 			switch(e.keyCode) {
 				case Number(Settings.control_left):
-						key='left';
-						mleft = false;
-						break;
+					key='left';
+					mleft = false;
+					break;
 				case Number(Settings.control_up):
-						key='forward';
-						mfoward = false;
-						break;
+					key='forward';
+					mfoward = false;
+					break;
 				case Number(Settings.control_right):
-						key='right';
-						mright = false;
-						break;
+					key='right';
+					mright = false;
+					break;
 				case Number(Settings.control_down):
-						key='backward';
-						mbackward = false;
-						break;
+					key='backward';
+					mbackward = false;
+					break;
 			};
 			
 			if(Utils.IsDefined(key)) {

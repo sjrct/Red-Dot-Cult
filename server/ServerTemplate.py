@@ -41,6 +41,8 @@ class Func:
 	KeyDown = 101
 	Fire = 102
 	MousePos = 103
+	DisableMovement = 200
+	EnableMovement = 201
 
 class Player(tornado.websocket.WebSocketHandler):
 	def open(self):
@@ -51,6 +53,7 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.pos = Vec3(160, 600, 1500)
 		self.rot = Vec2(0,0)
 		self.keys = Keys()
+		self.movement_enabled = True
 		
 		self.pos_transaction = None
 		
@@ -71,6 +74,12 @@ class Player(tornado.websocket.WebSocketHandler):
 		if mes.func == Func.Fire:
 			print 'BANG!'
 		
+		if mes.func == Func.DisableMovement:
+			self.movement_enabled = False
+			
+		if mes.func == Func.EnableMovement:
+			self.movement_enabled = True
+		
 		if mes.func == Func.MousePos:
 			self.rot = Vec2(mes.message['x'], mes.message['y'])
 		
@@ -85,18 +94,20 @@ class Player(tornado.websocket.WebSocketHandler):
 			theta2 = theta + (math.pi/2)
 			dx = 0
 			dz = 0
-			if self.keys.forward:
-				dz -= math.cos(theta) * speed
-				dx -= math.sin(theta) * speed
-			if self.keys.backward:
-				dz += math.cos(theta) * speed
-				dx += math.sin(theta) * speed
-			if self.keys.right:
-				dz -= math.cos(theta2) * speed
-				dx -= math.sin(theta2) * speed
-			if self.keys.left:
-				dz += math.cos(theta2) * speed
-				dx += math.sin(theta2) * speed
+			
+			if self.movement_enabled:
+				if self.keys.forward:
+					dz -= math.cos(theta) * speed
+					dx -= math.sin(theta) * speed
+				if self.keys.backward:
+					dz += math.cos(theta) * speed
+					dx += math.sin(theta) * speed
+				if self.keys.right:
+					dz -= math.cos(theta2) * speed
+					dx -= math.sin(theta2) * speed
+				if self.keys.left:
+					dz += math.cos(theta2) * speed
+					dx += math.sin(theta2) * speed
 			
 			self.pos.x += dx
 			self.pos.z += dz
