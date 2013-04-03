@@ -6,17 +6,9 @@ import math
 import json
 from apscheduler.scheduler import Scheduler
 
-hard_messages = ['Snell Arena;Science Center Showdown;C.A.M.P. Implosion', 'testlvl']
+import Vec
 
-class Vec3:
-	def __init__(self, x=0, y=0, z=0):
-		self.x = float(x)
-		self.y = float(y)
-		self.z = float(z)
-class Vec2:
-	def __init__(self, x=0, y=0):
-		self.x = float(x)
-		self.y = float(y)
+hard_messages = ['Snell Arena;Science Center Showdown;C.A.M.P. Implosion', 'testlvl']
 
 class Keys:
 	def __init__(self):
@@ -50,8 +42,8 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.sched.start()
 		self.sched.add_interval_job(self.sender, seconds=0.05)
 		
-		self.pos = Vec3(160, 600, 1500)
-		self.rot = Vec2(0,0)
+		self.pos = Vec.Vec3(160, 600, 1500)
+		self.rot = Vec.Vec2(0,0)
 		self.keys = Keys()
 		self.movement_enabled = True
 		
@@ -81,7 +73,7 @@ class Player(tornado.websocket.WebSocketHandler):
 			self.movement_enabled = True
 		
 		if mes.func == Func.MousePos:
-			self.rot = Vec2(mes.message['x'], mes.message['y'])
+			self.rot = Vec.Vec2(mes.message['x'], mes.message['y'])
 		
 	def on_close(self):
 		self.sched.shutdown()
