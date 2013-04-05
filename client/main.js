@@ -6,7 +6,6 @@ var Console;
 var Game;
 
 $(document).ready(function() {
-	
 	Console = new Hud.Area();
 	
 	Console.Append("Connecting...");
@@ -34,5 +33,3 @@ function connect(connected) {
 		Console.Append("Failed to connect to server");
 	}
 }
-
-

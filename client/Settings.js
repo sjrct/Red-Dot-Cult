@@ -10,6 +10,8 @@ Settings = {
 		control_down:   83,	// s key
 		control_reload: 17,	// ctrl
 		control_menu:   27,	// escape
+		
+		volume: 100,
 	},
 
 	set_defaults : function()
