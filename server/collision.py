@@ -26,7 +26,7 @@ def _my_div(x, y):
 	return x / y
 
 class Plane:
-	# Plane(Vec3 center, Vec3 normal, Vec2 extents)
+	# Plane(Vec3 position, Vec3 rotation, float width, float height)
 	def __init__(self, pos, rot, width, height):
 		self.pw = Vec.op3(collision._rot( Vec.Vec3(width), rot ),  pos, operator.add)
 		self.ph = Vec.op3(collision._rot( Vec.Vec3(0, height), rot ), pos, operator.add)
