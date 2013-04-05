@@ -16,11 +16,10 @@ def _rot(pnt, rot):
 	pnt = collision._rot_h( pnt, math.sin(rot.y), math.cos(rot.y) ).cycle()
 	return pnt
 
-def _circ_calc(r0, x0, r1):
+def _circ_calc(r0, x1, r1):
 	r0sq = r0 * r0
-	return Vec.Vec2( \
-		(r1*r1 - x0*x0 - r0sq) / (-2*x0), \
-		math.sqrt(abs(r0sq - x0*x0)) )
+	x = (r1*r1 - x1*x1 - r0sq) / (-2*x1)
+	return Vec.Vec2( x, math.sqrt(r0sq - x*x) )
 
 def _my_div(x, y):
 	if (y == 0): return 0
@@ -55,7 +54,7 @@ class Plane:
 		
 		# calculate intersection point
 		inter = Vec.op3(point, dist, operator.add)
-		
+
 		# calculate radii
 		r0 = Vec.op3(self.c, inter, operator.sub).length()
 		r1 = Vec.op3(self.pw, inter, operator.sub).length()
@@ -65,7 +64,7 @@ class Plane:
 		b = collision._circ_calc(r0, self.h, r2)
 		
 		# check whether negative y or not
-		if ( (a.x == b.y and -a.y == b.x) or (a.x == b.y and -a.y == -b.x) ):
+		if ( (a.x == b.y and -a.y == b.x) or (a.x == -b.y and -a.y == b.x) ):
 			a.y = -a.y
 		
 		# check bounds
