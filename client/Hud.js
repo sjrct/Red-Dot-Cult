@@ -2,11 +2,13 @@
 // hud.js
 //
 
-$(document.body).css('cursor', 'none');
-
 namespace('Hud', function()
 {
 	var menus_open = 0;
+	
+	Hud.init = function() {
+		$(document.body).css('cursor', 'none');
+	}
 	
 	Hud.MenuShown = function () {
 		return menus_open > 0;

@@ -89,17 +89,17 @@ class Player(tornado.websocket.WebSocketHandler):
 			
 			if self.movement_enabled:
 				if self.keys.forward:
-					dz -= math.cos(theta) * speed
-					dx -= math.sin(theta) * speed
-				if self.keys.backward:
 					dz += math.cos(theta) * speed
 					dx += math.sin(theta) * speed
+				if self.keys.backward:
+					dz -= math.cos(theta) * speed
+					dx -= math.sin(theta) * speed
 				if self.keys.right:
-					dz -= math.cos(theta2) * speed
-					dx -= math.sin(theta2) * speed
-				if self.keys.left:
 					dz += math.cos(theta2) * speed
 					dx += math.sin(theta2) * speed
+				if self.keys.left:
+					dz -= math.cos(theta2) * speed
+					dx -= math.sin(theta2) * speed
 			
 			self.pos.x += dx
 			self.pos.z += dz
