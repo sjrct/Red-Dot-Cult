@@ -30,7 +30,7 @@ namespace('Hud', function()
 					menus_open--;
 					this_.shown = false;
 					if (menus_open == 0) {
-						Socket.Send(Server.EnableMovement, key);
+						Socket.Send(Server.EnableMovement, '');
 						$(document.body).css('cursor', 'none');
 					}
 				}
@@ -40,7 +40,7 @@ namespace('Hud', function()
 				if (!this_.open) {
 					this_.shown = true;
 					$(document.body).css('cursor', 'auto');
-					Socket.Send(Server.DisableMovement, key);
+					Socket.Send(Server.DisableMovement, '');
 					menus_open++;
 					Hud.current_menu = this_;
 				}
@@ -61,8 +61,8 @@ namespace('Hud', function()
 			return new Hud.Menu.Button(text, click, this);
 		},
 		
-		Slider : function(text, value, slide) {
-			return new Hud.Menu.Slider(text, value, slide, this);
+		Slider : function(label, value, slide) {
+			return new Hud.Menu.Slider(label, value, slide, this);
 		}
 	}
 	
@@ -89,14 +89,14 @@ namespace('Hud', function()
 		}
 	}
 	
-	Hud.Menu.Slider = function(text, value, slide, menu) {
+	Hud.Menu.Slider = function(label, value, slide, menu) {
 		this.slider = document.createElement('div');
-		this.text = document.createElement('p');
-		this.text.className = 'ui-state-default ui-corner-all ui-helper-clearfix';
+		this.label = document.createElement('p');
+		this.label.className = 'ui-state-default ui-corner-all ui-helper-clearfix';
 		this.menu = menu;
 		this.value = value;
-		$(this.text).css('padding', '4px');
-		$(this.text).html(text);
+		$(this.label).css('padding', '4px');
+		$(this.label).html(label);
 		
 		var sldr = this;
 		$(this.slider).slider({
@@ -108,16 +108,36 @@ namespace('Hud', function()
 			}
 		});
 		
-		$(menu.menu).append(this.text);
+		$(menu.menu).append(this.label);
 		$(menu.menu).append(this.slider);
 		$(menu.menu).append('<br>');
 	}
 	
 	Hud.Menu.Slider.prototype = {
-		SetText : function(text) {
-			$(this.text).html(text);
-			this.text = text;
+		SetLabel : function(label) {
+			$(this.label).html(label);
+			this.label = label;
 		}
+	}
+	
+	Hud.TextEntry = function(title, value, handler) {
+		value = Utils.IsDefined(value) ? value : '';
+		
+		this.menu = new Hud.Menu(title);
+		this.field = document.createElement('input');
+		
+		$(this.field).attr('type', 'text');
+		$(this.field).attr('value', value);
+
+		$(this.menu.menu).append(this.field);
+		$(this.menu.menu).append('<br>');
+		
+		var entry = this; 
+		var btn = this.menu.Button('Confirm', function(btn) {
+			handler( entry, $(entry.field).val() );
+		});
+		
+		$(btn.button).css('float', 'right');
 	}
 
 	Hud.Area = function (text) {

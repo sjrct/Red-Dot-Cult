@@ -76,7 +76,18 @@ Game = function(level_name) {
 	pauseMenu.Button('Resume',function(){ pauseMenu.Close() } );
 	
 	Input.set_pause_menu(pauseMenu);
-		
-//	var local_plyr = new Player("You");
-//	local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
+	
+	if (Settings.player_name.length == 0 || Settings.player_name == 'undefined') {
+		var entry = new Hud.TextEntry('Enter a Player Name', '', function(entry, name) {
+			Console.Append("Player name is now '" + name + "'");
+			Settings.set('player_name', name);
+			entry.menu.Close();
+		});
+		entry.menu.Open();
+	}
+
+	if (Settings.player_name.length == 0 || Settings.player_name == 'undefined') {
+		this.local_plyr = new Player(Settings.player_name);
+		this.local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
+	}
 }

@@ -12,6 +12,7 @@ Settings = {
 		control_menu:   27,	// escape
 		
 		volume: 100,
+		player_name: '',
 	},
 
 	set_defaults : function()
