@@ -19,6 +19,8 @@ class Vec3:
 		self.y = self.x
 		self.x = t
 		return self
+	def toDict(self):
+		return {'x' : self.x, 'y' : self.y, 'z' : self.z}
 		
 def op3(a, b, f):
 	return Vec3( f(a.x, b.x), f(a.y, b.y), f(a.z, b.z) )
