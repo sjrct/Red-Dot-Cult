@@ -3,7 +3,6 @@ hard_max_active = 10
 class Arena:
 	def __init__(self):
 		self.players = {};
-		self.player_count = 0
 		self.active_count = 0
 	@staticmethod
 	def getInstance():
@@ -13,17 +12,22 @@ class Arena:
 		return internal_arena
 
 	def addPlayer(self, player):
-		self.player_count+=1
-		self.players[self.player_count] = player
-		return self.player_count
+		self.players[len(self.players)] = player
+		return len(self.players)
+	
 	def Join(self, player_id):
 		if self.active_count < hard_max_active and self.players[player_id].active == False:
 			self.players[player_id].active = True
+		self.active_count +=1;
+	
 	def GetPlayers(self):
 		ret = [];
 		for player in self.players.itervalues():
-			if player.active:
-				ret.append({'Name', player.name, 'Stats', player.getStats()});
+			if player.name is not None:
+				ret.append({'Name', player.name, 'Stats', player.getStats(), 'Position', player.pos.toDict(), 'Active', player.active});
 		return ret;
+	
 	def Disconnect(self, player_id):
+		if self.players[player_id].active:
+			self.active_count -=1;
 		del self.players[player_id]

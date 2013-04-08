@@ -17,7 +17,11 @@ $(document).ready(function() {
 //TODO move server stuff somewhere else
 
 var Server = {
-	StateBack : 0,
+	StateBack : 0,		//multi
+	JoinGame : 1,
+	SetName : 2,
+	SendStats : 3,		//multi
+	EventChanel : 4,	//multi
 	KeyUp : 100,
 	KeyDown : 101,
 	Fire : 102,

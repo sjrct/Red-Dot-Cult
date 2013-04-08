@@ -32,6 +32,9 @@ class Reply:
 class Func:
 	SendState = 0
 	JoinGame = 1
+	SetName = 2
+	SendStats = 3
+	EventChanel = 4
 	KeyUp = 100
 	KeyDown = 101
 	Fire = 102
@@ -45,14 +48,15 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.sched = Scheduler()
 		self.sched.start()
 		self.sched.add_interval_job(self.sender, seconds=0.05)
-		self.pos = Vec3(160, 600, 1500)
+		self.sched.add_interval_job(self.send_stats, seconds=0.1)
+		self.pos = Vec3(160, -600, 1500)
 		self.rot = Vec2(0,0)
 		self.keys = Keys()	
 		self.movement_enabled = True
 		
 		self.pos_transaction = None
 		
-		self.arena.addPlayer(self);
+		self.id = self.arena.addPlayer(self);
 		self.active = False;
 		
 		self.name = None;
@@ -66,7 +70,16 @@ class Player(tornado.websocket.WebSocketHandler):
 			self.pos_transaction = mes.id
 		
 		if mes.func == Func.JoinGame: 
-			self.write_message(Reply(mes.id, self.arena.Join(self)).json())
+			self.write_message(Reply(mes.id, self.arena.Join(self.id)).json())
+			
+		if mes.func == Func.SetName:
+			self.name = mes.message;
+		
+		if mes.func == Func.SendStats:
+			self.stats_transaction = mes.id;
+		
+		if mes.func == Func.EventChanel:
+			self.event_chanel = mes.id;
 		
 		if mes.func == Func.KeyDown:
 			self.keys.setKey(mes.message, True)
@@ -85,8 +98,10 @@ class Player(tornado.websocket.WebSocketHandler):
 
 		if mes.func == Func.MousePos:
 			self.rot = Vec2(mes.message['x'], mes.message['y'])
+			
 		
 	def on_close(self):
+		self.arena.Disconnect(self.id)
 		self.sched.shutdown()
 		print 'connection closed'
 	
@@ -114,5 +129,14 @@ class Player(tornado.websocket.WebSocketHandler):
 			
 			self.pos.x += dx
 			self.pos.z += dz
-			message = Reply(self.pos_transaction, {'x' : self.pos.x, 'y' : -self.pos.y, 'z' : self.pos.z})
+			message = Reply(self.pos_transaction, self.pos.toDict())
 			self.write_message(message.json())
+	def send_stats(self): 
+		if self.stats_transaction is not None:
+			self.write_message(Reply(self.stats_transaction, self.arena.getStats()))
+	def SendEvent(self, event):
+		if self.event_chanel is not None:
+			self.write_message(Reply(self.event_chanel, event))
+	
+	def getStats():
+		return "Unknown"
