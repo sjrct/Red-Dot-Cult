@@ -1,10 +1,14 @@
-namespace("Input", function() {
-	Input.Mouse = function() {
+namespace("Input", function()
+{
+	var pause_menu;
+	var mouse_interval;
+
+	Input.enable_mouse = function() {
 		var oldx=0, oldy=0, first_mm = true;
-		var mouse = this;
-		mouse.x = 0;
-		mouse.y = 0;
-		$(document).mousemove(function(e){
+		var curx = 0;
+		var cury = 0;
+		
+		$(document).on('mousemove.GameInput', function(e) {
 			if (Hud.MenuShown()) return;
 
 			if (first_mm) {
@@ -13,52 +17,48 @@ namespace("Input", function() {
 				var xoff=4.5;
 				var yoff=4.5;
 				
-				mouse.y += (oldx - e.pageX)/yoff;
-				mouse.x += (oldy - e.pageY)/xoff;
+				cury += (oldx - e.pageX)/yoff;
+				curx += (oldy - e.pageY)/xoff;
 			}
 			if(e.pageX +1 == $("#camera").width()) {
 				console.log(e.pageX);
-				mouse.y-=2;
+				cury-=2;
 			}
 			if(e.pageX == 0) {
 				console.log(e.pageX);
-				mouse.y+=2;
+				cury+=2;
 			}
 			oldx = e.pageX;
 			oldy = e.pageY;
-			if(Utils.IsDefined(mouse.camera)) {
-				camera.rot = new Vector3(180 + mouse.x, mouse.y, 0);
+			if(Utils.IsDefined(game.camera)) {
+				game.camera.rot = new Vector3(180 + curx, cury, 0);
 			}
 		});
 		
-		window.setInterval(function()
+		mouse_interval = window.setInterval(function()
 		{
-			Socket.Send(Server.MousePos, {x : mouse.x.toFixed(2), y: mouse.y.toFixed(2)});
+			Socket.Send(Server.MousePos, {x : curx.toFixed(2), y: cury.toFixed(2)});
 		}, 80);
 		
 	
-		$(document).click(function(e)
+		$(document).on('click.GameInput', function(e)
 		{
 			if (Hud.MenuShown()) return;
 			Socket.Send(Server.Fire, "");
 		});
 	}
 	
-	Input.Mouse.prototype = {
-		Destroy : function() {
-			
-		},
-		SetCamera : function(camera) {
-			this.camera = camera;
-		}
+	Input.disable_mouse = function() {
+		$(document).off('mousemove.GameInput');
+		$(document).off('click.GameInput');
+		window.clearInterval(mouse_interval);
 	}
 	
-	Input.Keyboard = function() {
+	Input.enable_keyboard = function() {
 		var mleft = false, mright = false;
-		var mfoward = false, mbackward = false;
+		var mforward = false, mbackward = false;
 		
-		var this_ = this;
-		$(document).keydown(function(e)
+		$(document).on('keydown.GameInput', function(e)
 		{
 			if (Hud.MenuShown()) {
 				if (e.keyCode == Number(Settings.control_menu)) {
@@ -76,9 +76,9 @@ namespace("Input", function() {
 					}
 					break;
 				case Number(Settings.control_up):
-					if(!mfoward) {
+					if(!mforward) {
 						key='forward';
-						mfoward = true;
+						mforward = true;
 					}
 					break;
 				case Number(Settings.control_right):
@@ -98,17 +98,18 @@ namespace("Input", function() {
 					break;
 			
 				case Number(Settings.control_menu):			
-					if(Utils.IsDefined(this_.menu)) {
-						this_.menu.Open();
+					if(Utils.IsDefined(pause_menu)) {
+						pause_menu.Open();
 					}
 					break;
 			};
+			
 			if(Utils.IsDefined(key)) {
 				Socket.Send(Server.KeyDown, key);
 			}
 		});
 
-		$(document).keyup(function(e)
+		$(document).on('keyup.GameInput', function(e)
 		{
 			var key;
 
@@ -119,7 +120,7 @@ namespace("Input", function() {
 					break;
 				case Number(Settings.control_up):
 					key='forward';
-					mfoward = false;
+					mforward = false;
 					break;
 				case Number(Settings.control_right):
 					key='right';
@@ -137,15 +138,16 @@ namespace("Input", function() {
 		});
 	}
 	
-	Input.Keyboard.prototype = {
-		Destroy : function() {
-			
-		},
-		SetMenu : function(menu) {
-			if(Utils.IsDefined(this.menu)) {
-				this.menu.Hide();
-			}
-			this.menu = menu;
+	Input.disable_keyboard = function() {
+		$(document).off('keydown.GameInput');
+		$(document).off('keyup.GameInput');
+	}
+	
+	Input.set_pause_menu = function(pm) {
+		if (Utils.IsDefined(pause_menu)) {
+			pause_menu.Close();
 		}
+		
+		pause_menu = pm;
 	}
 });

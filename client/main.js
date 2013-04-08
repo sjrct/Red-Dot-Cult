@@ -3,13 +3,13 @@
 //
 
 var Console;
-var Game;
+var game;
 
 $(document).ready(function() {
-	
 	Console = new Hud.Area();
-	
 	Console.Append("Connecting...");
+
+	Hud.init();
 	
 	Socket.Connect(connect);
 });
@@ -18,8 +18,8 @@ $(document).ready(function() {
 
 var Server = {
 	StateBack : 0,
-	KeyDown: 100,
-	KeyUp: 101,
+	KeyUp : 100,
+	KeyDown : 101,
 	Fire : 102,
 	MousePos : 103,
 	DisableMovement : 200,
@@ -29,10 +29,8 @@ var Server = {
 function connect(connected) {
 	if(connected) {
 		Console.Append("Connected to centeral server");
-		Game = new Game('testlvl');
+		game = new Game('testlvl');
 	} else {
 		Console.Append("Failed to connect to server");
 	}
 }
-
-

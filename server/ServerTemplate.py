@@ -5,8 +5,6 @@ import tornado.web
 from Player import Player
 from Arena import Arena
 
-arena = Arena()
-
 application = tornado.web.Application([(r'/ws', Player)])
 
 if __name__ == "__main__":
