@@ -24,7 +24,14 @@ class Arena:
 		ret = [];
 		for player in self.players.itervalues():
 			if player.name is not None:
-				ret.append({'Name', player.name, 'Stats', player.getStats(), 'Position', player.pos.toDict(), 'Active', player.active});
+				ret.append({'Id': player.id, 'Name': player.name, 'Stats': player.getStats(), 'Active': player.active});
+		return ret;
+		
+	def GetPositions(self):
+		ret = []
+		for player in self.players.itervalues():
+			if player.name is not None:
+				ret.append({'Id': player.id, 'Position': player.pos.toDict(), 'Active': player.active});
 		return ret;
 	
 	def Disconnect(self, player_id):

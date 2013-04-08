@@ -22,6 +22,7 @@ class Message:
 		self.id = data['id']
 		self.func = data['func']
 		self.message = data['message']
+
 class Reply:
 	def __init__(self, transaction, message):
 		self.message = message
@@ -30,10 +31,10 @@ class Reply:
 		return json.dumps({'id': self.transaction, 'message': self.message})
 
 class Func:
-	SendState = 0
+	GetId = 0
 	JoinGame = 1
 	SetName = 2
-	SendStats = 3
+	SendPos = 3
 	EventChanel = 4
 	KeyUp = 100
 	KeyDown = 101
@@ -47,8 +48,8 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.arena = Arena.getInstance()
 		self.sched = Scheduler()
 		self.sched.start()
-		self.sched.add_interval_job(self.sender, seconds=0.05)
-		self.sched.add_interval_job(self.send_stats, seconds=0.1)
+		self.sched.add_interval_job(self.calc_pos, seconds=0.05)
+		self.sched.add_interval_job(self.send_pos, seconds=0.05)
 		self.pos = Vec3(160, -600, 1500)
 		self.rot = Vec2(0,0)
 		self.keys = Keys()	
@@ -66,8 +67,8 @@ class Player(tornado.websocket.WebSocketHandler):
 	def on_message(self, string):
 		mes = Message(string);
 		
-		if mes.func == Func.SendState:
-			self.pos_transaction = mes.id
+		if mes.func == Func.GetId:
+			self.write_message(Reply(mes.id, self.id).json());
 		
 		if mes.func == Func.JoinGame: 
 			self.write_message(Reply(mes.id, self.arena.Join(self.id)).json())
@@ -75,8 +76,8 @@ class Player(tornado.websocket.WebSocketHandler):
 		if mes.func == Func.SetName:
 			self.name = mes.message;
 		
-		if mes.func == Func.SendStats:
-			self.stats_transaction = mes.id;
+		if mes.func == Func.SendPos:
+			self.pos_transaction = mes.id;
 		
 		if mes.func == Func.EventChanel:
 			self.event_chanel = mes.id;
@@ -105,38 +106,37 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.sched.shutdown()
 		print 'connection closed'
 	
-	def sender(self):
-		if self.pos_transaction != None:
-			speed = 80
-			theta = -self.rot.y * (math.pi)/180
-			theta2 = theta + (math.pi/2)
-			dx = 0
-			dz = 0
+	def calc_pos(self):
+		speed = 80
+		theta = -self.rot.y * (math.pi)/180
+		theta2 = theta + (math.pi/2)
+		dx = 0
+		dz = 0
+		
+		if self.movement_enabled:
+			if self.keys.forward:
+				dz -= math.cos(theta) * speed
+				dx -= math.sin(theta) * speed
+			if self.keys.backward:
+				dz += math.cos(theta) * speed
+				dx += math.sin(theta) * speed
+			if self.keys.right:
+				dz -= math.cos(theta2) * speed
+				dx -= math.sin(theta2) * speed
+			if self.keys.left:
+				dz += math.cos(theta2) * speed
+				dx += math.sin(theta2) * speed
+		
+		self.pos.x += dx
+		self.pos.z += dz
+		
+	def send_pos(self):
+		if self.pos_transaction is not None:
+			self.write_message(Reply(self.pos_transaction, self.arena.GetPositions()).json())
 			
-			if self.movement_enabled:
-				if self.keys.forward:
-					dz -= math.cos(theta) * speed
-					dx -= math.sin(theta) * speed
-				if self.keys.backward:
-					dz += math.cos(theta) * speed
-					dx += math.sin(theta) * speed
-				if self.keys.right:
-					dz -= math.cos(theta2) * speed
-					dx -= math.sin(theta2) * speed
-				if self.keys.left:
-					dz += math.cos(theta2) * speed
-					dx += math.sin(theta2) * speed
-			
-			self.pos.x += dx
-			self.pos.z += dz
-			message = Reply(self.pos_transaction, self.pos.toDict())
-			self.write_message(message.json())
-	def send_stats(self): 
-		if self.stats_transaction is not None:
-			self.write_message(Reply(self.stats_transaction, self.arena.getStats()))
 	def SendEvent(self, event):
 		if self.event_chanel is not None:
-			self.write_message(Reply(self.event_chanel, event))
+			self.write_message(Reply(self.event_chanel, event).json())
 	
 	def getStats():
 		return "Unknown"

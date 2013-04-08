@@ -19,6 +19,7 @@ class Vec3:
 		self.y = self.x
 		self.x = t
 		return self
+		
 	def toDict(self):
 		return {'x' : self.x, 'y' : self.y, 'z' : self.z}
 		

@@ -2,15 +2,16 @@
 // Player.js
 //
 
-function Player(tag)
+function Player(tag, parent)
 {
 	this.tag = tag;
 	this.health = Player.MAX_HEALTH;
 	this.weapons = [];
 	this.pos = new Vector3(0, 0, 0);
 	this.rot = new Vector3(0, 0, 0);
+	this.id = -1;
 
-//	this.entity = new Entity("player.obj");
+	this.entity = new Entity.Load(parent, "teapot");
 }
 
 Player.prototype.has_weapon = function() {

@@ -17,10 +17,10 @@ $(document).ready(function() {
 //TODO move server stuff somewhere else
 
 var Server = {
-	StateBack : 0,		//multi
+	GetId : 0,
 	JoinGame : 1,
 	SetName : 2,
-	SendStats : 3,		//multi
+	SendPos : 3,		//multi
 	EventChanel : 4,	//multi
 	KeyUp : 100,
 	KeyDown : 101,
@@ -32,7 +32,7 @@ var Server = {
 
 function connect(connected) {
 	if(connected) {
-		Console.Append("Connected to centeral server");
+		Console.Append("Connected to Centeral server");
 		game = new Game('testlvl');
 	} else {
 		Console.Append("Failed to connect to server");

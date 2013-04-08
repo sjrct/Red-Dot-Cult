@@ -1,5 +1,20 @@
-function UpdateCamera(data) {
-	game.camera.pos = new Vector3(data.x, data.y, data.z);
+//function UpdateCamera(data) {
+//}
+
+function UpdatePlayers(data) {
+	for (p in data) {
+		if (data[p].Id == game.player_id) {
+			game.camera.pos = new Vector3(data[p].Position.x, data[p].Position.y, data[p].Position.z);
+		} else {
+			if ( !Utils.IsDefined(game.players[data[p].Id]) ) {
+				// temporary~!
+				game.players[data[p].Id] = new Player('M[r/s/rs] Undefined', game.camera.div);
+			}
+
+			game.players[data[p].Id].pos = new Vector3(data[p].Position.x, -data[p].Position.y, data[p].Position.z);
+			game.players[data[p].Id].entity.Translate3d(game.players[data[p].Id].pos);
+		}
+	}
 }
 
 function control_button(pretty, key, menu)
@@ -22,7 +37,16 @@ function control_button(pretty, key, menu)
 }
 
 Game = function(level_name) {
-	Socket.TransactionMany(Server.StateBack, "", UpdateCamera);  //Start the camera position receive
+	this_ = this;
+	Socket.Transaction(Server.GetId, '', function(data) {
+		this_.player_id = data;
+		
+		if (Utils.IsDefined(this_.local_plyr)) {
+			this_.local_plyr = data;
+		}
+	});
+
+	Socket.TransactionMany(Server.SendPos, '', UpdatePlayers);
 	
 	this.camera = new Camera($("#camera"));
 	this.level = new Level(this.camera.div, level_name);
@@ -77,17 +101,25 @@ Game = function(level_name) {
 	
 	Input.set_pause_menu(pauseMenu);
 	
+	// setup players
 	if (Settings.player_name.length == 0 || Settings.player_name == 'undefined') {
 		var entry = new Hud.TextEntry('Enter a Player Name', '', function(entry, name) {
 			Console.Append("Player name is now '" + name + "'");
 			Settings.set('player_name', name);
 			entry.menu.Close();
+			Socket.Send(Server.SetName, name);
 		});
+		
 		entry.menu.Open();
+	} else {
+		Socket.Send(Server.SetName, Settings.player_name);
 	}
 
-	if (Settings.player_name.length == 0 || Settings.player_name == 'undefined') {
-		this.local_plyr = new Player(Settings.player_name);
-		this.local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
-	}
+	this.local_plyr = new Player(Settings.player_name, this.camera.div);
+	this.local_plyr.id = this.player_id;
+	this.local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
+	this.local_plyr.entity.Model.css('visibility', 'hidden');
+	this.local_plyr.entity.Model.css('display', 'none');
+	
+	this.players = {};
 }
