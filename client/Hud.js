@@ -125,9 +125,13 @@ namespace('Hud', function()
 		
 		this.menu = new Hud.Menu(title);
 		this.field = document.createElement('input');
+		this.field.className = 'ui-state-default ui-corner-all ui-helper-clearfix';
 		
 		$(this.field).attr('type', 'text');
 		$(this.field).attr('value', value);
+		$(this.field).css('width', '100%');
+		$(this.field).css('padding', '4px');
+		$(this.field).css('margin-bottom', '8px');
 
 		$(this.menu.menu).append(this.field);
 		$(this.menu.menu).append('<br>');
