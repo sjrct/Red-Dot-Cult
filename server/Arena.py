@@ -13,7 +13,7 @@ class Arena:
 
 	def addPlayer(self, player):
 		self.players[len(self.players)] = player
-		return len(self.players)
+		return len(self.players)-1
 	
 	def Join(self, player_id):
 		if self.active_count < hard_max_active and self.players[player_id].active == False:
@@ -36,5 +36,5 @@ class Arena:
 	
 	def Disconnect(self, player_id):
 		if self.players[player_id].active:
-			self.active_count -=1;
+			self.active_count -=1
 		del self.players[player_id]

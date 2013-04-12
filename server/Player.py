@@ -102,9 +102,9 @@ class Player(tornado.websocket.WebSocketHandler):
 			
 		
 	def on_close(self):
-		self.arena.Disconnect(self.id)
 		self.sched.shutdown()
 		print 'connection closed'
+		self.arena.Disconnect(self.id)
 	
 	def calc_pos(self):
 		speed = 80

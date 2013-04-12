@@ -61,5 +61,6 @@ int main(int argc, char **argv)
 		out << "]," << endl<<endl;
 	}
 	out << "];";
+	out << argv[2] << ".type = Entity.ModelType.TriModel" <<endl;
 	return 0;
 }
