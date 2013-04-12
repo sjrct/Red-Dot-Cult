@@ -1,6 +1,10 @@
 #define GLM_SWIZZLE
+
+#include <cmath>
+
 #include "triangles.h"
 #include "stdio.h"
+
 
 using namespace glm;
 
@@ -10,6 +14,10 @@ using namespace glm;
 vec3 transform(mat4 M, vec3 v) {
 	vec4 v2 = vec4(v,0);
 	return vec3(M * v2);
+}
+
+vec3 printv(vec3 v) {
+	printf("%f, %f, %f\n", v[0],v[1],v[2]);
 }
 
 // the vec4s are a vec3 axis with an angle in rad
@@ -30,6 +38,8 @@ void rot(vec4 & R1, vec4 & R2, vec3 A[3], vec3 B[3]) {
 	vec3 A_cross = normalize(cross(A[1], A[2]));
 	vec3 B_cross = normalize(cross(B[1], B[2]));
 	
+
+
 	vec3 Axis1;
 	float Theta1;
 	
@@ -41,6 +51,22 @@ void rot(vec4 & R1, vec4 & R2, vec3 A[3], vec3 B[3]) {
 		Axis1 = vec3(1,0,0);
 		Theta1 = A_cross == B_cross ? 0 : PI;
 	} else {
+
+		for (int i = 0; i < 3; ++i) {
+			if (isnan(A_cross[i])) {
+				printf("A_cross[%i] is nan\n", i);
+				printv(A[0]);
+				printv(A[1]);
+				printv(A[2]);
+			}
+			/*if (isnan(B_cross[i])) {
+				printf("B_cross[%i] is nan\n", i);
+				printv(B[0]);
+				printv(B[1]);
+				printv(B[2]);
+			}*/
+		}
+
 		Theta1 = acos(dot(A_cross, B_cross));
 	}
 	
