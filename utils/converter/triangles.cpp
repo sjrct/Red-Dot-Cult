@@ -25,10 +25,16 @@ vec3 printv(vec3 v) {
 void rot(vec4 & R1, vec4 & R2, vec3 A[3], vec3 B[3]) {
 	mat4	M1;
 	mat4	M2;
-
+	printv(A[0]);
+	printv(A[1]);
+	printv(A[2]);
 	A[1] =  A[1] - A[0];
 	A[2] =  A[2] - A[0];
 	A[0] =  A[0] - A[0];
+
+	printv(A[0]);
+	printv(A[1]);
+	printv(A[2]);
 
 	B[1] =  B[1] - B[0];
 	B[2] =  B[2] - B[0];
@@ -51,24 +57,15 @@ void rot(vec4 & R1, vec4 & R2, vec3 A[3], vec3 B[3]) {
 		Axis1 = vec3(1,0,0);
 		Theta1 = A_cross == B_cross ? 0 : PI;
 	} else {
-
-		for (int i = 0; i < 3; ++i) {
-			if (isnan(A_cross[i])) {
-				printf("A_cross[%i] is nan\n", i);
-				printv(A[0]);
-				printv(A[1]);
-				printv(A[2]);
-			}
-			/*if (isnan(B_cross[i])) {
-				printf("B_cross[%i] is nan\n", i);
-				printv(B[0]);
-				printv(B[1]);
-				printv(B[2]);
-			}*/
+		if (isnan(A_cross[0])) {
+			printf("A_cross is nan\n");
+			printv(A[0]);
+			printv(A[1]);
+			printv(A[2]);
 		}
-
 		Theta1 = acos(dot(A_cross, B_cross));
 	}
+	printf("\n");
 	
 	// Generate M1 from the first Axis angle pair
 	// M1 should put both of the triangles on the same plane
