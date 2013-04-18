@@ -107,13 +107,13 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.arena.Disconnect(self.id)
 	
 	def calc_pos(self):
-		speed = 80
-		theta = -self.rot.y * (math.pi)/180
-		theta2 = theta + (math.pi/2)
-		dx = 0
-		dz = 0
-		
 		if self.movement_enabled:
+			speed = 80
+			theta = -self.rot.y * (math.pi)/180
+			theta2 = theta + (math.pi/2)
+			dx = 0
+			dz = 0
+		
 			if self.keys.forward:
 				dz -= math.cos(theta) * speed
 				dx -= math.sin(theta) * speed
@@ -126,9 +126,27 @@ class Player(tornado.websocket.WebSocketHandler):
 			if self.keys.left:
 				dz += math.cos(theta2) * speed
 				dx += math.sin(theta2) * speed
-		
-		self.pos.x += dx
-		self.pos.z += dz
+
+			done = (dx == 0 and dz == 0)
+			chg = Vec3(dx, 0, dz)
+			
+			while not done:
+				done = True	
+				for it in self.arena.planes:
+					if it.checkLine(self.pos, chg):
+						if dx == 0 or dz == 0 or chg.z == 0:
+							chg.x = chg.z = 0
+						elif chg.x != 0:
+							chg.x = 0
+							done = False
+						else:
+							chg.x = dx
+							chg.z = 0
+							done = False
+						break
+			
+			self.pos.x += chg.x
+			self.pos.z += chg.z
 		
 	def send_pos(self):
 		if self.pos_transaction is not None:

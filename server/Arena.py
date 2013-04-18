@@ -1,9 +1,30 @@
+import collision
+import json
+import Vec
+
 internal_arena = None
 hard_max_active = 10
+
 class Arena:
 	def __init__(self):
 		self.players = {};
 		self.active_count = 0
+		self.planes = [];
+		
+		with open('levels/testlvl.json') as fl:
+			data = fl.read()
+			fl.close()
+			level = json.loads(data)
+		
+			for p in level:
+				self.planes.append(collision.Plane( \
+					Vec.Vec3(p[0][0], p[0][1], p[0][2]), \
+					Vec.Vec3(p[1][0], p[1][1], p[1][2]), \
+					Vec.Vec3(p[2][0], p[2][1], p[2][2])))
+#					Vec.Vec3(p["position"][0], p["position"][1], p["position"][2]), \
+#					Vec.Vec3(p["rotation"][0], p["rotation"][1], p["rotation"][2]), \
+#					p["width"], p["height"]))
+
 	@staticmethod
 	def getInstance():
 		global internal_arena
