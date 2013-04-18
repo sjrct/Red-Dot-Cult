@@ -21,9 +21,6 @@ class Arena:
 					Vec.Vec3(p[0][0], p[0][1], p[0][2]), \
 					Vec.Vec3(p[1][0], p[1][1], p[1][2]), \
 					Vec.Vec3(p[2][0], p[2][1], p[2][2])))
-#					Vec.Vec3(p["position"][0], p["position"][1], p["position"][2]), \
-#					Vec.Vec3(p["rotation"][0], p["rotation"][1], p["rotation"][2]), \
-#					p["width"], p["height"]))
 
 	@staticmethod
 	def getInstance():
