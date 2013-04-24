@@ -11,7 +11,7 @@ function UpdatePlayers(data) {
 				game.players[data[p].Id] = new Player('M[r/s/rs] Undefined', game.camera.div);
 			}
 
-			game.players[data[p].Id].pos = new Vector3(data[p].Position.x, -data[p].Position.y, data[p].Position.z);
+			game.players[data[p].Id].pos = new Vector3(-data[p].Position.x, -data[p].Position.y, -data[p].Position.z);
 			game.players[data[p].Id].entity.Translate3d(game.players[data[p].Id].pos);
 		}
 	}
@@ -117,7 +117,7 @@ Game = function(level_name) {
 
 	this.local_plyr = new Player(Settings.player_name, this.camera.div);
 	this.local_plyr.id = this.player_id;
-	this.local_plyr.add_weapon(new Weapon("L4z0R", 10, 5, 15));
+	this.local_plyr.add_weapon(new Weapon("Mr. Default Gun", 10, 100));
 	this.local_plyr.entity.Model.css('visibility', 'hidden');
 	this.local_plyr.entity.Model.css('display', 'none');
 	

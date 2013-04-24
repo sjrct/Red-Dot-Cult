@@ -1,8 +1,10 @@
 # Player
 import tornado.websocket
 from Arena import Arena
+from Weapon import Weapon
 import math
 import json
+import collision
 from Vec import *
 
 from apscheduler.scheduler import Scheduler
@@ -54,6 +56,8 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.rot = Vec2(0,0)
 		self.keys = Keys()	
 		self.movement_enabled = True
+		self.dirty_coll = True
+		self.weapon = Weapon("Mr. Default Gun")
 		
 		self.pos_transaction = None
 		
@@ -89,7 +93,23 @@ class Player(tornado.websocket.WebSocketHandler):
 			self.keys.setKey(mes.message, False)
 		
 		if mes.func == Func.Fire:
-			print 'BANG!'
+			if self.weapon.Fire():
+				print 'BANG!'
+			
+				maxdist = 20000.
+				theta = -self.rot.y * (math.pi)/180
+				sin = -math.sin(theta)
+				cos = -math.cos(theta)
+				mod = Vec3(sin*maxdist, 0, cos*maxdist)
+			
+				for plyr in self.arena.players.itervalues():
+					if plyr.name is not None and plyr != self:
+						plyr.calc_coll_planes()
+
+						if plyr.pl1.checkLine(self.pos, mod) or plyr.pl2.checkLine(self.pos, mod):
+							print(self.name + ' hit ' + plyr.name)
+			else:
+				print "no ammo left"
 		
 		if mes.func == Func.DisableMovement:
 			self.movement_enabled = False
@@ -105,7 +125,25 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.sched.shutdown()
 		print 'connection closed'
 		self.arena.Disconnect(self.id)
-	
+
+	def calc_coll_planes(self):
+		if self.dirty_coll:
+			w = 100
+			yu = -2000
+			yd = 2000
+
+			a1 = Vec3(self.pos.x - w, self.pos.y + yd, self.pos.z - w)
+			a2 = Vec3(self.pos.x - w, self.pos.y + yu, self.pos.z - w)
+			a3 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z + w)
+
+			b1 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z - w)
+			b2 = Vec3(self.pos.x + w, self.pos.y + yu, self.pos.z - w)
+			b3 = Vec3(self.pos.x - w, self.pos.y + yd, self.pos.z + w)
+
+			self.pl1 = collision.Plane(a1, a2, a3)
+			self.pl2 = collision.Plane(b1, b2, b3)
+			self.dirty_coll = False
+
 	def calc_pos(self):
 		if self.movement_enabled:
 			speed = 80
@@ -145,8 +183,10 @@ class Player(tornado.websocket.WebSocketHandler):
 							done = False
 						break
 			
-			self.pos.x += chg.x
-			self.pos.z += chg.z
+			if chg.x != 0 or chg.z != 0:
+				self.pos.x += chg.x
+				self.pos.z += chg.z
+				self.dirt_coll = True
 		
 	def send_pos(self):
 		if self.pos_transaction is not None:

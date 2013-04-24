@@ -24,9 +24,6 @@ Player.prototype.weapon = function() {
 
 Player.prototype.add_weapon = function(weap)
 {
-	// type checking might be helpful
-	// Tripple equals FTW
-	
 	for (var i = 0; i < this.weapons.length; i++) {
 		if (this.weapons[i].tag == weap.tag) {
 			this.weapons[i].resammo += weap.resammo + weap.clipammo;
