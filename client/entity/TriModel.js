@@ -11,10 +11,10 @@ namespace("Entity", function() {
 	}
 	
 	function create_triange(p1,p2,p3,trans,R1,R2) {
-		var scale = 10;
+		var scale = 100;
 		
 		var points = [[p1[0]*scale,p1[1]*scale], [p2[0]*scale,p2[1]*scale], [p3[0]*scale,p3[1]*scale]];
-		var style = {'fill': '#666', 'stroke': '#0F0', 'stroke-width': 2};
+		var style = {'fill': '#666', 'stroke': '#0F0', 'stroke-width': 0};
 		
 		var svg = new Entity.Svg();
 		svg.Polygon(points, style);

@@ -7,6 +7,7 @@ Div = function(parent) {
 	
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
+	this.scale = new Vector3(1,1,1);
 	
 	UpdateByObj(this.div, transform_style, "preserve-3d");
 	UpdateByObj(this.div, transform_origin, "0% 0%");
@@ -34,6 +35,10 @@ Div.prototype = {
 		this.position = v;
 		this.UpdateTransform();
 	},
+	SetScale : function(v) {
+		this.scale = v;
+		this.UpdateTransform();
+	},
 	css : function(item, val) {
 		$(this.div).css(item, val);
 	},
@@ -42,7 +47,7 @@ Div.prototype = {
 		this.UpdateTransform();
 	},
 	UpdateTransform : function() {
-		UpdateByObj(this.div, transform, this.transform + " " + translate3d(this.position) + rotate3d(this.rotation));
+		UpdateByObj(this.div, transform, this.transform + " " + scale3d(this.scale) +  translate3d(this.position) + rotate3d(this.rotation));
 	},
 	SetId : function(id) {
 		$(this.div).attr('id', id);

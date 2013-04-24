@@ -11,7 +11,7 @@ function Player(tag, parent)
 	this.rot = new Vector3(0, 0, 0);
 	this.id = -1;
 
-	this.entity = new Entity.Load(parent, "teapot");
+	this.entity = new Entity.Load(parent, "player");
 }
 
 Player.prototype.has_weapon = function() {

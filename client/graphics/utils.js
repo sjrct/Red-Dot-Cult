@@ -78,7 +78,7 @@ function rotate3d(v) {
 }
 
 function scale3d(v) {
-	return sprintf("scale3d(%1px,%2px,%3px) ", v.x, v.y, v.z);
+	return sprintf(" scale3d(%1,%2,%3) ", v.x, v.y, v.z);
 }
 
 function skew3d(v) {

@@ -14,8 +14,9 @@ namespace("Entity", function () {
 			var ent = new Entity.Load(div, obj.model);
 			ent.Model.SetId(obj.name);
 			Animation.Apply(animations[obj.animation], ent);
-			ent.Translate3d(obj.location);
-			ent.Rotate3d(obj.rotation);
+			ent.Translate3d(obj.location || new Vector3(0,0,0));
+			ent.Rotate3d(obj.rotation || new Vector3(0,0,0));
+			ent.Scale3d(obj.scale || new Vector3(1,1,1));
 			if(deps.indexOf(obj.model) == -1) {
 				deps.push(obj.model);
 			}

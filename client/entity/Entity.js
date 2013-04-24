@@ -92,6 +92,9 @@ namespace('Entity', function()
 		Rotate3d : function(v) {
 			this.Model.SetRotate(v);
 		},
+		Scale3d : function(v) {
+			this.Model.SetScale(v);
+		},
 		ApplyAnimation : function(anim) {
 			Animation.Apply(anim, this.ModelAnim);
 		}
