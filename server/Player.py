@@ -203,7 +203,7 @@ class Player(tornado.websocket.WebSocketHandler):
 
 	def calc_pos(self):
 		if self.movement_enabled:
-			speed = 80
+			speed = 15
 			theta = -self.rot.y * (math.pi)/180
 			theta2 = theta + (math.pi/2)
 			dx = 0

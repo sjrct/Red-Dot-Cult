@@ -8,8 +8,8 @@ html {
 }
 
 .viewport {
-	perspective: 800;
-	-webkit-perspective: 800;
+	perspective: 700;
+	-webkit-perspective: 700;
 	-moz-perspective: 800;
 	-o-perspective: 800;
 	-ms-perspective: 800;

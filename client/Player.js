@@ -12,6 +12,7 @@ function Player(tag, parent)
 	this.id = -1;
 
 	this.entity = new Entity.Load(parent, "player");
+	this.entity.Scale3d(new Vector3(0.25,0.25,0.25));
 }
 
 Player.prototype.has_weapon = function() {

@@ -38,7 +38,7 @@ player = {
 		{ name: 'arm_right', model:'player_arm', animation:'arm', rotation: new Vector3(0,0,-90), },
 		{ name: 'leg_left', model:'player_leg', animation: 'lleg'},
 		{ name: 'leg_right', model:'player_leg', scale: new Vector3(-1,1,1), animation: 'rleg' },
-		{ name: 'gun', model:'gun', location: new Vector3(180,-240,560), rotation: new Vector3(0,90,0), scale: new Vector3(0.5,0.5,0.5) }
+//		{ name: 'gun', model:'gun', location: new Vector3(180,-240,560), rotation: new Vector3(0,90,0), scale: new Vector3(0.5,0.5,0.5) }
 	],
 	
 

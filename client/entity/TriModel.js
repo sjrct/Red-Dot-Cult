@@ -14,7 +14,7 @@ namespace("Entity", function() {
 		var scale = 100;
 		
 		var points = [[p1[0]*scale,p1[1]*scale], [p2[0]*scale,p2[1]*scale], [p3[0]*scale,p3[1]*scale]];
-		var style = {'fill': '#666', 'stroke': '#0F0', 'stroke-width': 0};
+		var style = {'fill': '#404', 'stroke': '#F00', 'stroke-width': 1};
 		
 		var svg = new Entity.Svg();
 		svg.Polygon(points, style);
