@@ -17,6 +17,14 @@ function UpdatePlayers(data) {
 	}
 }
 
+function HandleEventChanel(data) {
+	for (p in data) {
+		if (data[p].mes == 'SetHealth') {
+			game.health_bar.SetHealth(data[p].health);
+		}
+	}
+}
+
 function control_button(pretty, key, menu)
 {
 	return menu.Button(
@@ -47,6 +55,7 @@ Game = function(level_name) {
 	});
 
 	Socket.TransactionMany(Server.SendPos, '', UpdatePlayers);
+	Socket.TransactionMany(Server.EventChanel, '', HandleEventChanel);
 	
 	this.camera = new Camera($("#camera"));
 	this.level = new Level(this.camera.div, level_name);

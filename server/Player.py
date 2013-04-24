@@ -137,7 +137,6 @@ class Player(tornado.websocket.WebSocketHandler):
 					print 'reloaded'
 				else:
 					print "can't reload anymore"
-				print(str(self.weapon().clipammo) + "/" + str(self.weapon().maxclip))
 			else:
 				self.keys.setKey(mes.message, True)
 		
@@ -162,6 +161,10 @@ class Player(tornado.websocket.WebSocketHandler):
 						if plyr.pl1.checkLine(self.pos, mod) or plyr.pl2.checkLine(self.pos, mod):
 							print(self.name + ' hit ' + plyr.name)
 							plyr.injure(self.weapon().damage)
+							plyr.SendEvent([{ \
+								'mes': 'SetHealth', \
+								'health': plyr.health \
+							}])
 			else:
 				print "no ammo left or no gun"
 		

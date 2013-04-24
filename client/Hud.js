@@ -160,7 +160,7 @@ namespace('Hud', function()
 		$(this.label).css('top', '-5px');
 
 		this.bar = document.createElement('div');
- 		$(this.bar).progressbar({ value: 50 });
+ 		$(this.bar).progressbar({ value: 100 });
 		$(this.bar).css('width', '100%');
 		$(this.bar).css('padding', '4px');
 		$(this.bar).css('position', 'absolute');
