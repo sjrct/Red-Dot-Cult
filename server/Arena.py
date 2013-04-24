@@ -7,16 +7,22 @@ hard_max_active = 10
 
 class Arena:
 	def __init__(self):
-		self.players = {};
+		self.players = {}
 		self.active_count = 0
-		self.planes = [];
+		self.planes = []
+		self.spawns_pos = []
+		self.spawns_rot = []
 		
 		with open('levels/testlvl.json') as fl:
 			data = fl.read()
 			fl.close()
 			level = json.loads(data)
+			
+			for s in level['spawns']:
+				self.spawns_pos.append(Vec.Vec3(s[0][0], s[0][1], s[0][2]))
+				self.spawns_rot.append(Vec.Vec2(s[1][0], s[1][1]))
 		
-			for p in level:
+			for p in level['planes']:
 				self.planes.append(collision.Plane( \
 					Vec.Vec3(p[0][0], p[0][1], p[0][2]), \
 					Vec.Vec3(p[1][0], p[1][1], p[1][2]), \

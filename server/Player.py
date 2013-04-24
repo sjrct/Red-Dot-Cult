@@ -4,6 +4,7 @@ from Arena import Arena
 from Weapon import Weapon
 import math
 import json
+import random
 import collision
 from Vec import *
 
@@ -52,21 +53,65 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.sched.start()
 		self.sched.add_interval_job(self.calc_pos, seconds=0.05)
 		self.sched.add_interval_job(self.send_pos, seconds=0.05)
-		self.pos = Vec3(160, -600, 1500)
-		self.rot = Vec2(0,0)
 		self.keys = Keys()	
 		self.movement_enabled = True
 		self.dirty_coll = True
-		self.weapon = Weapon("Mr. Default Gun")
 		
 		self.pos_transaction = None
+		self.id = self.arena.addPlayer(self)
+		self.active = False
+		self.name = None
+
+		self.cur_weapon = None
+		self.weapons = []
+		self.add_weapon(Weapon("Mr. Default Gun"))
 		
-		self.id = self.arena.addPlayer(self);
-		self.active = False;
+		self.maxhealth = 100
+		self.health = self.maxhealth
 		
-		self.name = None;
+		self.pos = Vec3()
+		self.rot = Vec2()
+		self.spawn()
 		
 		print 'new connection'
+	
+	def has_weapon(self):
+		return self.cur_weapon is not None
+	
+	def weapon(self):
+		return self.weapons[self.cur_weapon]
+	
+	def add_weapon(self, weap):
+		for i in range(len(self.weapons)):
+			if self.weapons[i].name == self.weapons[i].name:
+				self.weapons[i].resammo += weap.resammo + weap.clipammo;
+
+				if self.weapons[i].resammo > self.weapons[i].maxres:
+					self.weapons[i].resammo = self.weapons[i].maxres
+				return
+
+		if not self.has_weapon():
+			self.cur_weapon = 0
+
+		self.weapons.append(weap)
+	
+	def injure(self, damage):
+		self.health -= damage
+		
+		if self.health < 0:
+			print(self.name + ' died')
+			self.spawn()
+	
+	def spawn(self):
+		i = random.randint(0, len(self.arena.spawns_pos)-1)
+		p = self.arena.spawns_pos[i]
+		r = self.arena.spawns_rot[i]
+
+		self.pos.x = p.x
+		self.pos.y = p.y
+		self.pos.z = p.z
+		self.rot.x = r.x
+		self.rot.y = r.y
 		
 	def on_message(self, string):
 		mes = Message(string);
@@ -87,13 +132,21 @@ class Player(tornado.websocket.WebSocketHandler):
 			self.event_chanel = mes.id;
 		
 		if mes.func == Func.KeyDown:
-			self.keys.setKey(mes.message, True)
+			if mes.message == 'reload':
+				if self.weapon().Reload():
+					print 'reloaded'
+				else:
+					print "can't reload anymore"
+				print(str(self.weapon().clipammo) + "/" + str(self.weapon().maxclip))
+			else:
+				self.keys.setKey(mes.message, True)
 		
 		if mes.func == Func.KeyUp:
-			self.keys.setKey(mes.message, False)
+			if mes.message != 'reload':
+				self.keys.setKey(mes.message, False)
 		
 		if mes.func == Func.Fire:
-			if self.weapon.Fire():
+			if self.has_weapon() and self.weapon().Fire():
 				print 'BANG!'
 			
 				maxdist = 20000.
@@ -108,8 +161,9 @@ class Player(tornado.websocket.WebSocketHandler):
 
 						if plyr.pl1.checkLine(self.pos, mod) or plyr.pl2.checkLine(self.pos, mod):
 							print(self.name + ' hit ' + plyr.name)
+							plyr.injure(self.weapon().damage)
 			else:
-				print "no ammo left"
+				print "no ammo left or no gun"
 		
 		if mes.func == Func.DisableMovement:
 			self.movement_enabled = False

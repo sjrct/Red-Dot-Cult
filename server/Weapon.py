@@ -16,7 +16,11 @@ class Weapon:
 	def Reload(self):
 		if self.clipammo != self.maxclip and self.resammo > 0:
 			total = self.clipammo + self.resammo
-			newclip = total < self.maxclip if total else self.maxclip
+			
+			if total < self.maxclip:
+				newclip = total
+			else:
+				newclip = self.maxclip
 
 			self.resammo -= newclip - self.clipammo
 			self.clipammo = newclip
