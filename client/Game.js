@@ -122,4 +122,7 @@ Game = function(level_name) {
 	this.local_plyr.entity.Model.css('display', 'none');
 	
 	this.players = {};
+	
+	// health bar
+	this.health_bar = new Hud.HealthBar();
 }

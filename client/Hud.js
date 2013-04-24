@@ -143,6 +143,44 @@ namespace('Hud', function()
 		
 		$(btn.button).css('float', 'right');
 	}
+	
+	Hud.HealthBar = function() {
+		this.wrapper = document.createElement('div');
+		this.wrapper.className = 'hud';
+		$(this.wrapper).css('left', '10px');
+		$(this.wrapper).css('bottom', '35px');
+		$(this.wrapper).css('width', '200px');
+		$(this.wrapper).css('height', '20px');
+
+		this.label = document.createElement('div');
+		this.label.className = 'ui-widget ui-front';
+		$(this.label).html('<p>Health</p>');
+		$(this.label).css('position', 'absolute');
+		$(this.label).css('left', '10px');
+		$(this.label).css('top', '-5px');
+
+		this.bar = document.createElement('div');
+ 		$(this.bar).progressbar({ value: 50 });
+		$(this.bar).css('width', '100%');
+		$(this.bar).css('padding', '4px');
+		$(this.bar).css('position', 'absolute');
+		$(this.bar).css('left', '0');
+		$(this.bar).css('top', '0');
+
+		// this is kind of hackish
+		$(this.bar.childNodes[0]).css('background', '#440000 url(images/ui-bg_highlight-soft_red_1x100.png) 50% 50% repeat-x');
+		$(this.bar.childNodes[0]).css('border', '1px solid #330000');
+		
+		$(this.wrapper).append(this.bar);
+		$(this.wrapper).append(this.label);
+		$(this.wrapper).appendTo('body');
+	}
+	
+	Hud.HealthBar.prototype = {
+		SetHealth : function(value) {
+			$(this.bar).progressbar('value', value);
+		}
+	}
 
 	Hud.Area = function (text) {
 		this.div = $(document.createElement('div'));
