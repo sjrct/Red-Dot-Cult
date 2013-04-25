@@ -153,17 +153,21 @@ class Player(tornado.websocket.WebSocketHandler):
 			if self.has_weapon() and self.weapon().Fire():
 				print 'BANG!'
 			
-				maxdist = 20000.
 				theta = -self.rot.y * (math.pi)/180
 				sin = -math.sin(theta)
 				cos = -math.cos(theta)
-				mod = Vec3(sin*maxdist, 0, cos*maxdist)
+				mod = Vec3(sin, 0, cos)
 			
 				for plyr in self.arena.players.itervalues():
 					if plyr.name is not None and plyr != self:
 						plyr.calc_coll_planes()
 
-						if plyr.pl1.checkLine(self.pos, mod) or plyr.pl2.checkLine(self.pos, mod):
+						a = plyr.pl1.checkLine2(self.pos, mod)
+						b = plyr.pl2.checkLine2(self.pos, mod)
+						c = plyr.pl3.checkLine2(self.pos, mod)
+						d = plyr.pl4.checkLine2(self.pos, mod)
+
+						if a or b or c or d:
 							print(self.name + ' hit ' + plyr.name)
 							plyr.injure(self.weapon().damage, self)
 							plyr.SendEvent([{ 'mes': 'SetHealth', 'health': plyr.health }])
@@ -187,20 +191,36 @@ class Player(tornado.websocket.WebSocketHandler):
 
 	def calc_coll_planes(self):
 		if self.dirty_coll:
-			w = 100
-			yu = -2000
-			yd = 2000
+			w = 60
+			yu = 400
+			yd = -400
 
 			a1 = Vec3(self.pos.x - w, self.pos.y + yd, self.pos.z - w)
 			a2 = Vec3(self.pos.x - w, self.pos.y + yu, self.pos.z - w)
-			a3 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z + w)
+			a3 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z - w)
 
-			b1 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z - w)
-			b2 = Vec3(self.pos.x + w, self.pos.y + yu, self.pos.z - w)
-			b3 = Vec3(self.pos.x - w, self.pos.y + yd, self.pos.z + w)
+			b1 = Vec3(self.pos.x - w, self.pos.y + yd, self.pos.z + w)
+			b2 = Vec3(self.pos.x - w, self.pos.y + yu, self.pos.z + w)
+			b3 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z + w)
+
+			c1 = Vec3(self.pos.x - w, self.pos.y + yd, self.pos.z - w)
+			c2 = Vec3(self.pos.x - w, self.pos.y + yu, self.pos.z - w)
+			c3 = Vec3(self.pos.x - w, self.pos.y + yd, self.pos.z + w)
+
+			d1 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z - w)
+			d2 = Vec3(self.pos.x + w, self.pos.y + yu, self.pos.z - w)
+			d3 = Vec3(self.pos.x + w, self.pos.y + yd, self.pos.z + w)
 
 			self.pl1 = collision.Plane(a1, a2, a3)
 			self.pl2 = collision.Plane(b1, b2, b3)
+			self.pl3 = collision.Plane(c1, c2, c3)
+			self.pl4 = collision.Plane(d1, d2, d3)
+			
+			self.arena.planes.append(self.pl1)
+			self.arena.planes.append(self.pl2)
+			self.arena.planes.append(self.pl3)
+			self.arena.planes.append(self.pl4)
+			
 			self.dirty_coll = False
 
 	def calc_pos(self):
