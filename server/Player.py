@@ -57,6 +57,8 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.keys = Keys()	
 		self.movement_enabled = True
 		self.dirty_coll = True
+		self.gravity = 0
+		self.jumping = False
 		
 		self.pos_transaction = None
 		self.id = self.arena.addPlayer(self)
@@ -145,6 +147,10 @@ class Player(tornado.websocket.WebSocketHandler):
 					print 'reloaded'
 				else:
 					print "can't reload anymore"
+			elif mes.message == 'jump':
+				if self.gravity == 0:
+					self.gravity = -25
+					self.jumping = True
 			else:
 				self.keys.setKey(mes.message, True)
 		
@@ -248,7 +254,7 @@ class Player(tornado.websocket.WebSocketHandler):
 			if self.keys.left:
 				dz += math.cos(theta2) * speed
 				dx += math.sin(theta2) * speed
-
+			
 			done = (dx == 0 and dz == 0)
 			chg = Vec3(dx, 0, dz)
 			
@@ -271,6 +277,15 @@ class Player(tornado.websocket.WebSocketHandler):
 				self.pos.x += chg.x
 				self.pos.z += chg.z
 				self.dirt_coll = True
+
+		if self.jumping:
+			self.pos.y += self.gravity
+			self.gravity += 3
+			if self.gravity > 20: self.gravity = 20
+			if self.pos.y >= -180:
+				self.pos.y = -180
+				self.gravity = 0
+				self.jumping = False
 		
 	def send_pos(self):
 		if self.pos_transaction is not None:

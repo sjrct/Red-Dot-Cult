@@ -82,6 +82,7 @@ Game = function(level_name) {
 		['Move Left',     'control_left'  ],
 		['Move Right',    'control_right' ],
 		['Reload',        'control_reload'],
+		['Jump',          'control_jump'  ],
 	];
 	
 	for (var i = 0; i < ctrls.length; i++) {

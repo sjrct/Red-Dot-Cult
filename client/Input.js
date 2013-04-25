@@ -96,6 +96,9 @@ namespace("Input", function()
 				case Number(Settings.control_reload):
 					key='reload';
 					break;
+				case Number(Settings.control_jump):
+					key='jump';
+					break;
 			
 				case Number(Settings.control_menu):			
 					if(Utils.IsDefined(pause_menu)) {
