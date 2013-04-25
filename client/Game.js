@@ -10,7 +10,6 @@ function UpdatePlayers(data) {
 				// temporary~!
 				game.players[data[p].Id] = new Player('M[r/s/rs] Undefined', game.camera.div);
 			}
-
 			game.players[data[p].Id].pos = new Vector3(-data[p].Position.x*4, 700, -data[p].Position.z*4);
 			game.players[data[p].Id].entity.Translate3d(game.players[data[p].Id].pos);
 		}
@@ -18,12 +17,16 @@ function UpdatePlayers(data) {
 }
 
 function HandleEventChanel(data) {
+	console.log(data);
 	for (p in data) {
 		if (data[p].mes == 'SetHealth') {
 			game.health_bar.SetHealth(data[p].health);
 		}
 		else if (data[p].mes == 'Killed') {
 			Console.Append(data[p].by + ' killed ' + data[p].who);
+		}
+		if(data[p].mes == 'Left') {
+			game.players[data[p].who].entity.Model.div.remove();
 		}
 	}
 }

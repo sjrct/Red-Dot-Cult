@@ -48,6 +48,7 @@ class Func:
 
 class Player(tornado.websocket.WebSocketHandler):
 	def open(self):
+		self.isopen = True;
 		self.arena = Arena.getInstance()
 		self.sched = Scheduler()
 		self.sched.start()
@@ -61,6 +62,8 @@ class Player(tornado.websocket.WebSocketHandler):
 		self.id = self.arena.addPlayer(self)
 		self.active = False
 		self.name = None
+		
+		self.arena.Join(self.id)
 
 		self.cur_weapon = None
 		self.weapons = []
@@ -181,7 +184,9 @@ class Player(tornado.websocket.WebSocketHandler):
 			
 		
 	def on_close(self):
+		self.isopen = False
 		self.sched.shutdown()
+		self.arena.BroadcastEvent([{ 'mes': 'Left', 'who': self.id }])
 		print 'connection closed'
 		self.arena.Disconnect(self.id)
 
@@ -252,7 +257,8 @@ class Player(tornado.websocket.WebSocketHandler):
 			self.write_message(Reply(self.pos_transaction, self.arena.GetPositions()).json())
 			
 	def SendEvent(self, event):
-		if self.event_chanel is not None:
+		print "asdf"
+		if self.event_chanel is not None and self.isopen:
 			self.write_message(Reply(self.event_chanel, event).json())
 	
 	def getStats():
