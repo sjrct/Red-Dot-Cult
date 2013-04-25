@@ -58,6 +58,11 @@ class Arena:
 				ret.append({'Id': player.id, 'Position': player.pos.toDict(), 'Active': player.active});
 		return ret;
 	
+	def BroadcastEvent(self, event):
+		for player in self.players.itervalues():
+			if player.name is not None:
+				player.SendEvent(event)
+	
 	def Disconnect(self, player_id):
 		if self.players[player_id].active:
 			self.active_count -=1

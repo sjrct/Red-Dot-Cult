@@ -95,12 +95,17 @@ class Player(tornado.websocket.WebSocketHandler):
 
 		self.weapons.append(weap)
 	
-	def injure(self, damage):
+	def injure(self, damage, by):
 		self.health -= damage
 		
-		if self.health < 0:
+		if self.health <= 0:
 			print(self.name + ' died')
+			self.health = self.maxhealth
 			self.spawn()
+			self.weapon().clipammo = self.weapon().maxclip
+			self.weapon().resammo = self.weapon().maxres
+			self.SendEvent([{ 'mes': 'SetHealth', 'health': self.health }])
+			self.arena.BroadcastEvent([{ 'mes': 'Killed', 'who': self.name, 'by': by.name }])
 	
 	def spawn(self):
 		i = random.randint(0, len(self.arena.spawns_pos)-1)
@@ -160,11 +165,8 @@ class Player(tornado.websocket.WebSocketHandler):
 
 						if plyr.pl1.checkLine(self.pos, mod) or plyr.pl2.checkLine(self.pos, mod):
 							print(self.name + ' hit ' + plyr.name)
-							plyr.injure(self.weapon().damage)
-							plyr.SendEvent([{ \
-								'mes': 'SetHealth', \
-								'health': plyr.health \
-							}])
+							plyr.injure(self.weapon().damage, self)
+							plyr.SendEvent([{ 'mes': 'SetHealth', 'health': plyr.health }])
 			else:
 				print "no ammo left or no gun"
 		

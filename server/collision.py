@@ -57,7 +57,6 @@ class Plane:
 		# calculate intersection point
 		dist = Vec.op3(dist, dire, operator.mul)
 		inter = Vec.op3(point, dist, operator.add)
-		inter.y = -inter.y #temporary?
 
 		# calculate radii
 		rc = Vec.op3(self.c, inter, operator.sub).length()
