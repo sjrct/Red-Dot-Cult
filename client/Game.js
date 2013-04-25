@@ -9,11 +9,17 @@ function UpdatePlayers(data) {
 			if ( !Utils.IsDefined(game.players[data[p].Id]) ) {
 				// temporary~!
 				game.players[data[p].Id] = new Player('M[r/s/rs] Undefined', game.camera.div);
+				game.players[data[p].Id].mov = false;
 			}
-			game.players[data[p].Id].pos = new Vector3(-data[p].Position.x*4, 700, -data[p].Position.z*4);
-			game.players[data[p].Id].rot = new Vector3(0, -data[p].Rotation.y, 0);
-			game.players[data[p].Id].entity.Translate3d(game.players[data[p].Id].pos);
-			game.players[data[p].Id].entity.Rotate3d(game.players[data[p].Id].rot);
+			var pl = game.players[data[p].Id];
+			pl.pos = new Vector3(-data[p].Position.x*4, 700, -data[p].Position.z*4);
+			pl.rot = new Vector3(0, -data[p].Rotation.y, 0);
+			pl.entity.Translate3d(game.players[data[p].Id].pos);
+			pl.entity.Rotate3d(game.players[data[p].Id].rot);
+			if(data[p].Moving != pl.mov) {
+				pl.mov = data[p].Moving;
+				game.players[data[p].Id].entity.Animate(pl.mov);
+			}
 		}
 	}
 }

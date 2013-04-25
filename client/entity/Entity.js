@@ -97,6 +97,13 @@ namespace('Entity', function()
 		},
 		ApplyAnimation : function(anim) {
 			Animation.Apply(anim, this.ModelAnim);
+		},
+		Animate : function(mov) {
+			$($(this.Model.div).children()[0]).children().each(function(a,b) 
+			{
+				console.log(b);
+				UpdateByObj($(b).children()[0], animation_play_state, mov ? 'running' : 'paused');
+			});
 		}
 	}
 
