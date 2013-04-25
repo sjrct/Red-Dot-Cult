@@ -227,11 +227,6 @@ class Player(tornado.websocket.WebSocketHandler):
 			self.pl3 = collision.Plane(c1, c2, c3)
 			self.pl4 = collision.Plane(d1, d2, d3)
 			
-			self.arena.planes.append(self.pl1)
-			self.arena.planes.append(self.pl2)
-			self.arena.planes.append(self.pl3)
-			self.arena.planes.append(self.pl4)
-			
 			self.dirty_coll = False
 
 	def calc_pos(self):
