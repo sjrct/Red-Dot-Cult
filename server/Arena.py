@@ -66,4 +66,5 @@ class Arena:
 	def Disconnect(self, player_id):
 		if self.players[player_id].active:
 			self.active_count -=1
-		del self.players[player_id]
+			self.players[player_id].active = False
+#		del self.players[player_id]
