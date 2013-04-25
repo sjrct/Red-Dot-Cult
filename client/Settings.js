@@ -10,6 +10,7 @@ Settings = {
 		control_down:   83,	// s key
 		control_reload: 17,	// ctrl
 		control_menu:   27,	// escape
+		control_jump:   32, // space?
 		
 		volume: 100,
 		player_name: '',
