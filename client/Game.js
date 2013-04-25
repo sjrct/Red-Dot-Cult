@@ -22,6 +22,9 @@ function HandleEventChanel(data) {
 		if (data[p].mes == 'SetHealth') {
 			game.health_bar.SetHealth(data[p].health);
 		}
+		else if (data[p].mes == 'Killed') {
+			Console.Append(data[p].by + ' killed ' + data[p].who);
+		}
 	}
 }
 
