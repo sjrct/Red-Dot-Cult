@@ -49,6 +49,7 @@ class Func:
 class Player(tornado.websocket.WebSocketHandler):
 	def open(self):
 		self.isopen = True;
+		self.moving = False;
 		self.arena = Arena.getInstance()
 		self.sched = Scheduler()
 		self.sched.start()
@@ -234,22 +235,27 @@ class Player(tornado.websocket.WebSocketHandler):
 			speed = 15
 			theta = -self.rot.y * (math.pi)/180
 			theta2 = theta + (math.pi/2)
+			self.moving = False;
 			dx = 0
 			dz = 0
 		
 			if self.keys.forward:
 				dz -= math.cos(theta) * speed
 				dx -= math.sin(theta) * speed
+				self.moving = True;
 			if self.keys.backward:
 				dz += math.cos(theta) * speed
 				dx += math.sin(theta) * speed
+				self.moving = True;
 			if self.keys.right:
 				dz -= math.cos(theta2) * speed
 				dx -= math.sin(theta2) * speed
+				self.moving = True;
 			if self.keys.left:
 				dz += math.cos(theta2) * speed
 				dx += math.sin(theta2) * speed
-			
+				self.moving = True;
+
 			done = (dx == 0 and dz == 0)
 			chg = Vec3(dx, 0, dz)
 			

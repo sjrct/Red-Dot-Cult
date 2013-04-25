@@ -32,7 +32,7 @@ namespace("Animation", function() {
 	}
 	
 	Animation.Apply = function(id, div) {
-		div.ApplyAnimation(id, 4, 'infinite');
+		div.ApplyAnimation(id, 1, 'infinite');
 	}
 	
 	Animation.Clear = function(ent) {
