@@ -277,7 +277,6 @@ class Player(tornado.websocket.WebSocketHandler):
 			self.write_message(Reply(self.pos_transaction, self.arena.GetPositions()).json())
 			
 	def SendEvent(self, event):
-		print "asdf"
 		if self.event_chanel is not None and self.isopen:
 			self.write_message(Reply(self.event_chanel, event).json())
 	
