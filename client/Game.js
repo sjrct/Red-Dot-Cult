@@ -11,7 +11,9 @@ function UpdatePlayers(data) {
 				game.players[data[p].Id] = new Player('M[r/s/rs] Undefined', game.camera.div);
 			}
 			game.players[data[p].Id].pos = new Vector3(-data[p].Position.x*4, 700, -data[p].Position.z*4);
+			game.players[data[p].Id].rot = new Vector3(0, -data[p].Rotation.y, 0);
 			game.players[data[p].Id].entity.Translate3d(game.players[data[p].Id].pos);
+			game.players[data[p].Id].entity.Rotate3d(game.players[data[p].Id].rot);
 		}
 	}
 }

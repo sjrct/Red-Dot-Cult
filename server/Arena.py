@@ -55,7 +55,7 @@ class Arena:
 		ret = []
 		for player in self.players.itervalues():
 			if player.name is not None and player.active:
-				ret.append({'Id': player.id, 'Position': player.pos.toDict(), 'Active': player.active});
+				ret.append({'Id': player.id, 'Position': player.pos.toDict(), 'Rotation': player.rot.toDict(), 'Active': player.active});
 		return ret;
 	
 	def BroadcastEvent(self, event):
