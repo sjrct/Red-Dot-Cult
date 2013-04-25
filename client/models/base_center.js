@@ -6,7 +6,8 @@ base_center = {
 		{ name: 'floor1', model: 'floor', location: new Vector3(1000,0, 0000)},
 		{ name: 'floor1', model: 'floor', location: new Vector3( 0000,0,1000)},
 		{ name: 'floor1', model: 'floor', location: new Vector3(1000,0,1000)},
-
+		{ name: 'wall1',  model: 'wall' , location: new Vector3(0,0,-1000)},
+		{ name: 'wall1',  model: 'wall' , location: new Vector3(0,0 ,1000)},
 	]
 }
 

@@ -12,7 +12,7 @@ corridor = {
 		}
 	},
 	objects: [
-		{ name: 'door', model: 'plane', location: new Vector3(500,0,1000), rotation: new Vector3(0,0,0), animation: 'test2' },
+		{ name: 'door', model: 'plane', location: new Vector3(500,0,1000), rotation: new Vector3(0,0,0), },
 		
 		{ name: 'wall1-1', model: 'plane', location: new Vector3(-500,0,1000), rotation: new Vector3(0,0,0), },
 		{ name: 'wall1-2', model: 'plane', location: new Vector3(-500,0,0), rotation: new Vector3(0,90,0), },
